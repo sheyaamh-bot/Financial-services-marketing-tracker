@@ -590,9 +590,6 @@ def main() -> int:
     }
     SITE.mkdir(exist_ok=True)
     (SITE / "data.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
-    old = SITE / "PSG_Competitor_Tracker.xlsx"
-    if old.exists():
-        old.unlink()
     build_excel(data, items, cfg, SITE / WORKBOOK)
     print(f"Done: {len(items)} items, {len(errors)} fetch errors.")
     return 0
