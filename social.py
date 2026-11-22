@@ -82,13 +82,26 @@ def discover_from_website(url: str, extra_urls: list[str] | None = None) -> dict
     return found
 
 
+ALLOWED_SUFFIX = {"insurance", "insure", "wealth", "management", "group", "sa", "south", "africa", "african",
+                  "investments", "investment", "investors", "fund", "funds", "managers", "asset", "limited", "ltd",
+                  "official", "tv", "financial", "services", "life", "holdings", "za"}
+
+
+def channel_matches(brand: str, title: str) -> bool:
+    """True only when the channel name is the brand name, optionally followed by generic
+    words such as "Insurance" or "Wealth Management" (so "Coronation Avenue Church" fails)."""
+    b = re.sub(r"\bsa\b", "", brand.lower()).split()
+    t = re.sub(r"[^a-z0-9 ]", " ", title.lower()).split()
+    return t[:len(b)] == b and all(w in ALLOWED_SUFFIX for w in t[len(b):])
+
+
 def youtube_search_channel(brand: str) -> str | None:
     """Finds a channel through YouTube's own search, accepted only when the channel's
     name contains the brand name (so a fan or unrelated channel isn't picked up)."""
     q = urllib.parse.urlencode({"search_query": brand + " South Africa", "sp": "EgIQAg%3D%3D"})
     html = _get("https://www.youtube.com/results?" + q.replace("%253D", "%3D")).text
     for cid, title in re.findall(r'"channelId":"(UC[\w\-]{22})","title":\{"simpleText":"([^"]+)"', html)[:5]:
-        if brand.lower().replace(" sa", "") in title.lower():
+        if channel_matches(brand, title):
             return "channel/" + cid
     return None
 

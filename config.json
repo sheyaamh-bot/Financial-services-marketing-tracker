@@ -84,7 +84,10 @@
         {
           "name": "Coronation",
           "query": "\"Coronation Fund Managers\" OR \"Coronation Asset Management\"",
-          "website": "https://www.coronation.com"
+          "website": "https://www.coronation.com",
+          "social": {
+            "youtube": "-"
+          }
         },
         {
           "name": "Discovery",
