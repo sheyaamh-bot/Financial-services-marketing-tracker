@@ -12,7 +12,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: competitor-tracker
+  group: daily-tracker
   cancel-in-progress: false
 
 jobs:
@@ -37,8 +37,8 @@ jobs:
 
       - name: Commit updated data
         run: |
-          git config user.name "competitor-tracker-bot"
-          git config user.email "competitor-tracker-bot@users.noreply.github.com"
+          git config user.name "tracker-bot"
+          git config user.email "tracker-bot@users.noreply.github.com"
           git add data site
           git diff --cached --quiet || git commit -m "Daily competitor tracker update $(date -u +%F)"
           git push

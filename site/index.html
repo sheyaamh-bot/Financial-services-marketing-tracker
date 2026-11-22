@@ -3,65 +3,56 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PSG Competitor Tracker</title>
-<meta name="description" content="Daily marketing and PR competitor tracker for PSG Wealth and PSG Insure. Built with Claude Code.">
+<title>Financial Services Marketing Tracker</title>
+<meta name="description" content="An independent daily view of marketing and PR activity across South African wealth and insurance brands. Built with Claude Code.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
-/* PSG brand tokens: cyan #00AEEF, charcoal #353E43, ink #241F21, action blue #0054FF, yellow #FFDE21, magenta #D4055C. */
+/* Neutral, brand-agnostic palette. Series colours are the validated reference pair (blue, orange). */
 :root{
-  --psg-cyan:#00AEEF; --charcoal:#353E43; --ink-brand:#241F21; --action:#0054FF; --yellow:#FFDE21; --magenta:#D4055C;
-  --home:#0096D6;            /* PSG series: deeper cyan so marks pass 3:1 on white */
-  --compare:#D4055C;         /* comparison series */
-  --neutral:#B9C1C6;         /* other competitors */
-  --bg:#F2F4F5; --surface:#FFFFFF; --surface-2:#F2F9FD; --border:#DDE2E5;
-  --ink:#241F21; --ink-2:#353E43; --muted:#5F6B72; --grid:#E8ECEE;
-  --heat-0:#F2F9FD; --heat-1:#0089C4;
-  --pos:#0096D6; --neu:#CBD2D6; --neg:#D4055C;
-  --radius:8px;
+  --a:#2A78D6; --b:#EB6834; --other:#C3C8CE;
+  --bg:#F5F6F7; --surface:#FFFFFF; --surface-2:#F1F3F5; --border:#DEE2E6;
+  --ink:#111418; --ink-2:#3B4450; --muted:#5B6570; --grid:#E9ECEF;
+  --head:#1F2933; --accent:#2A78D6;
+  --heat-0:#F1F5FA; --heat-1:#2A78D6;
+  --pos:#2A78D6; --neu:#CDD2D7; --neg:#EB6834;
+  --radius:10px;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --home:#1E9BD7; --compare:#DB2A6E; --neutral:#59656C;
-    --bg:#1B2124; --surface:#252D31; --surface-2:#2C363B; --border:#3A464C;
-    --ink:#F2F4F5; --ink-2:#D5DBDE; --muted:#9AA6AC; --grid:#323D42;
-    --heat-0:#2C363B; --heat-1:#1E9BD7; --pos:#1E9BD7; --neu:#4A565C; --neg:#DB2A6E;
+    --a:#3987E5; --b:#D95926; --other:#56606B;
+    --bg:#121417; --surface:#1A1D21; --surface-2:#22262B; --border:#30363D; --grid:#2A2F35;
+    --ink:#F0F1F2; --ink-2:#C9CED4; --muted:#9AA3AD; --head:#0B0D0F; --accent:#3987E5;
+    --heat-0:#22262B; --heat-1:#3987E5; --pos:#3987E5; --neu:#46505A; --neg:#D95926;
   }
 }
 :root[data-theme="dark"]{
-  --home:#1E9BD7; --compare:#DB2A6E; --neutral:#59656C;
-  --bg:#1B2124; --surface:#252D31; --surface-2:#2C363B; --border:#3A464C;
-  --ink:#F2F4F5; --ink-2:#D5DBDE; --muted:#9AA6AC; --grid:#323D42;
-  --heat-0:#2C363B; --heat-1:#1E9BD7; --pos:#1E9BD7; --neu:#4A565C; --neg:#DB2A6E;
+  --a:#3987E5; --b:#D95926; --other:#56606B;
+  --bg:#121417; --surface:#1A1D21; --surface-2:#22262B; --border:#30363D; --grid:#2A2F35;
+  --ink:#F0F1F2; --ink-2:#C9CED4; --muted:#9AA3AD; --head:#0B0D0F; --accent:#3987E5;
+  --heat-0:#22262B; --heat-1:#3987E5; --pos:#3987E5; --neu:#46505A; --neg:#D95926;
 }
 *{box-sizing:border-box}
 html,body{margin:0}
-body{background:var(--bg);color:var(--ink);font:15px/1.5 "IBM Plex Sans",Arial,sans-serif;-webkit-font-smoothing:antialiased}
-a{color:var(--action)}
-:root[data-theme="dark"] a:not(.btn){color:#6E9BFF}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) a:not(.btn){color:#6E9BFF}}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
 .wrap{max-width:1240px;margin:0 auto;padding:0 16px}
 
-/* Header */
-header{position:relative;overflow:hidden;background:var(--charcoal);color:#fff}
-header .dot{position:absolute;border-radius:50%;pointer-events:none}
-header .dot.y{width:120px;height:120px;background:var(--yellow);top:-72px;right:38%}
-header .dot.m{width:84px;height:84px;background:var(--magenta);bottom:-42px;right:-20px}
-.top{position:relative;display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;padding:22px 0 18px}
-.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;letter-spacing:.08em;color:var(--psg-cyan)}
-h1{margin:2px 0 0;font-size:28px;font-weight:300;letter-spacing:-.01em;line-height:1.15}
-#updated{margin:4px 0 0;font-size:13px;color:#C9D0D4}
-.actions{display:flex;gap:10px;flex-wrap:wrap;position:relative;z-index:1}
-.btn{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:8px 16px;border-radius:4px;font:600 14px "IBM Plex Sans",Arial,sans-serif;text-decoration:none;border:1px solid rgba(255,255,255,.35);color:#fff;background:transparent;cursor:pointer}
-.btn.primary{background:var(--action);border-color:var(--action);color:#fff}
-.btn:hover{filter:brightness(1.1)}
-.tabs{position:relative;display:flex;gap:4px;padding:0 0 0}
-.tab{font:600 15px "IBM Plex Sans",Arial,sans-serif;color:#C9D0D4;background:transparent;border:0;border-bottom:4px solid transparent;padding:10px 18px 12px;cursor:pointer;min-height:44px}
-.tab[aria-selected="true"]{color:#fff;border-bottom-color:var(--psg-cyan)}
+header{background:var(--head);color:#fff}
+.top{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;padding:22px 0 14px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#9FB3C8}
+h1{margin:2px 0 0;font-size:26px;font-weight:700;letter-spacing:-.02em;line-height:1.2}
+#updated{margin:4px 0 0;font-size:13px;color:#B8C2CC}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;min-height:40px;padding:8px 16px;border-radius:8px;font:600 14px Inter,system-ui,sans-serif;text-decoration:none;border:1px solid rgba(255,255,255,.3);color:#fff;background:transparent;cursor:pointer}
+.btn.primary{background:#fff;color:#111418;border-color:#fff}
+.btn:hover{opacity:.9}
+.tabs{display:flex;gap:4px}
+.tab{font:600 15px Inter,system-ui,sans-serif;color:#B8C2CC;background:transparent;border:0;border-bottom:3px solid transparent;padding:10px 16px 12px;cursor:pointer;min-height:44px}
+.tab[aria-selected="true"]{color:#fff;border-bottom-color:#fff}
 .tab:hover{color:#fff}
-.cyanband{height:6px;background:var(--psg-cyan)}
-.banner{background:var(--yellow);color:var(--ink-brand);font-weight:600;font-size:14px;padding:8px 16px;text-align:center}
+.banner{background:#FFF4D6;color:#5A4300;font-weight:600;font-size:14px;padding:8px 16px;text-align:center;border-bottom:1px solid #F0DFAE}
 
 main.wrap{padding:24px 16px 48px}
 .grid{display:grid;gap:16px}
@@ -69,71 +60,67 @@ main.wrap{padding:24px 16px 48px}
 .g-2{grid-template-columns:1.1fr .9fr}
 @media (max-width:900px){.g-kpi{grid-template-columns:repeat(2,1fr)}.g-2{grid-template-columns:1fr}}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;min-width:0}
-.card h2{margin:0 0 2px;font-size:20px;font-weight:300;color:var(--ink)}
+.card h2{margin:0 0 2px;font-size:17px;font-weight:600}
 .card .sub{margin:0 0 14px;color:var(--muted);font-size:13px}
-.label{font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;letter-spacing:.06em;color:var(--muted);text-transform:uppercase}
-.kpi{border-top:4px solid var(--psg-cyan)}
-.kpi .value{font-size:36px;font-weight:300;letter-spacing:-.02em;margin-top:4px;line-height:1.1}
+.label{font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--muted);text-transform:uppercase}
+.kpi .value{font-size:28px;font-weight:700;letter-spacing:-.02em;margin-top:4px;line-height:1.15;overflow-wrap:anywhere}
 .kpi .delta{font-size:13px;color:var(--ink-2);margin-top:4px}
-.briefing{position:relative;overflow:hidden}
-.briefing .dot{position:absolute;width:64px;height:64px;border-radius:50%;background:var(--yellow);top:-32px;left:-32px}
-.briefing h2{font-size:24px;padding-left:8px}
-.briefing ul{margin:10px 0 0;padding-left:28px}
+.briefing h2{font-size:20px}
+.briefing ul{margin:10px 0 0;padding-left:20px}
 .briefing li{margin:6px 0}
 .tag{display:inline-block;font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--surface-2);color:var(--ink-2);white-space:nowrap}
 .row-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
-.seg{display:inline-flex;border:1px solid var(--border);border-radius:4px;overflow:hidden}
+.seg{display:inline-flex;border:1px solid var(--border);border-radius:8px;overflow:hidden}
 .seg button{border:0;background:transparent;color:var(--ink-2);padding:6px 12px;font:inherit;font-size:13px;cursor:pointer;min-height:34px}
-.seg button[aria-pressed="true"]{background:var(--charcoal);color:#fff}
-select,input[type=search]{font:inherit;font-size:13px;color:var(--ink);background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:6px 10px;min-height:34px}
-label.inline{font-size:13px;color:var(--muted);display:flex;gap:8px;align-items:center}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+select,input[type=search]{font:inherit;font-size:13px;color:var(--ink);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 10px;min-height:34px;max-width:100%}
+.pickers{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.pick{display:flex;gap:6px;align-items:center;font-size:13px;color:var(--muted)}
+.pick i{display:inline-block;width:12px;height:12px;border-radius:3px}
 .chart-box{position:relative;height:340px}
-.legend{display:flex;gap:16px;font-size:13px;color:var(--ink-2);margin-bottom:8px;flex-wrap:wrap}
-.legend i{display:inline-block;width:12px;height:3px;border-radius:2px;vertical-align:middle;margin-right:6px}
-.legend i.sq{height:10px;width:10px}
 .table-wrap{overflow-x:auto}
 table{border-collapse:collapse;width:100%;font-size:13px}
 th{text-align:left;font-weight:600;color:var(--muted);padding:8px;border-bottom:1px solid var(--border);white-space:nowrap}
 td{padding:8px;border-bottom:1px solid var(--grid);vertical-align:top}
-tr.home td{font-weight:600;background:var(--surface-2)}
 td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.sw{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:6px;vertical-align:middle}
 .heat td.cell{text-align:center;font-variant-numeric:tabular-nums;border:2px solid var(--surface);border-radius:4px;min-width:44px}
 .heat th.rot{white-space:normal;min-width:64px;font-size:12px;vertical-align:bottom}
+.legend{display:flex;gap:16px;font-size:13px;color:var(--ink-2);margin-bottom:8px;flex-wrap:wrap}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;vertical-align:middle;margin-right:6px}
 .stack{display:flex;height:10px;border-radius:5px;overflow:hidden;gap:2px;min-width:120px}
 .stack span{display:block;height:100%}
 .feed-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
 .feed{max-height:520px;overflow:auto}
 .feed .item{padding:10px 0;border-bottom:1px solid var(--grid)}
 .feed .item a{color:var(--ink);text-decoration:none;font-weight:500}
-.feed .item a:hover{color:var(--action);text-decoration:underline}
+.feed .item a:hover{color:var(--accent);text-decoration:underline}
 .feed .meta{font-size:12px;color:var(--muted);margin-top:2px}
-.empty{color:var(--muted);font-size:13px;background:var(--surface-2);border-radius:6px;padding:14px}
-.tooltip{position:fixed;pointer-events:none;background:var(--ink-brand);color:#fff;font-size:12px;padding:6px 9px;border-radius:4px;opacity:0;transition:opacity .1s;z-index:10}
+.empty{color:var(--muted);font-size:13px;background:var(--surface-2);border-radius:8px;padding:14px}
+.tooltip{position:fixed;pointer-events:none;background:#111418;color:#fff;font-size:12px;padding:6px 9px;border-radius:6px;opacity:0;transition:opacity .1s;z-index:10}
 footer.wrap{color:var(--muted);font-size:12px;padding:0 16px 32px}
 </style>
 </head>
 <body>
 <header>
-  <span class="dot y" aria-hidden="true"></span><span class="dot m" aria-hidden="true"></span>
   <div class="wrap">
     <div class="top">
       <div>
-        <div class="eyebrow">MARKETING &amp; PR · COMPETITOR TRACKER</div>
-        <h1 id="title">PSG Wealth vs the market</h1>
+        <div class="eyebrow">South African financial services · Marketing &amp; PR</div>
+        <h1>Financial Services Marketing Tracker</h1>
         <p id="updated">Loading…</p>
       </div>
       <div class="actions">
-        <a class="btn primary" href="PSG_Competitor_Tracker.xlsx" download>Download Excel</a>
+        <a class="btn primary" href="Financial_Services_Marketing_Tracker.xlsx" download>Download Excel</a>
         <button class="btn" id="themeBtn" type="button">Light / dark</button>
       </div>
     </div>
-    <div class="tabs" role="tablist" aria-label="Competitor set">
+    <div class="tabs" role="tablist" aria-label="Sector">
       <button class="tab" role="tab" id="tab-Wealth" data-seg="Wealth" aria-selected="true">Wealth</button>
-      <button class="tab" role="tab" id="tab-Insure" data-seg="Insure" aria-selected="false">Insure</button>
+      <button class="tab" role="tab" id="tab-Insure" data-seg="Insure" aria-selected="false">Insurance</button>
     </div>
   </div>
 </header>
-<div class="cyanband" aria-hidden="true"></div>
 <div class="banner" id="demoBanner" hidden>Sample data for preview. Live coverage replaces it on the first morning run.</div>
 
 <main class="wrap" role="tabpanel">
@@ -141,24 +128,29 @@ footer.wrap{color:var(--muted);font-size:12px;padding:0 16px 32px}
 
   <section class="grid g-kpi" id="kpis" style="margin-bottom:16px"></section>
 
-  <section class="grid g-2" style="margin-bottom:16px">
-    <div class="card">
-      <div class="row-head">
-        <div><h2>Share of voice</h2><p class="sub">Share of all news mentions in this competitor set</p></div>
-        <div class="seg" role="group" aria-label="Period">
-          <button type="button" data-sov="7" aria-pressed="true">7 days</button>
-          <button type="button" data-sov="30" aria-pressed="false">30 days</button>
-        </div>
-      </div>
-      <div class="chart-box" style="height:400px"><canvas id="sovChart" aria-label="Share of voice bar chart" role="img"></canvas></div>
+  <section class="card" style="margin-bottom:16px">
+    <div class="row-head">
+      <div><h2>Compare two brands</h2><p class="sub">Highlighted in the share of voice and daily coverage charts below</p></div>
     </div>
-    <div class="card">
-      <div class="row-head">
-        <div><h2>Daily coverage</h2><p class="sub">Mentions per day, last 30 days</p></div>
-        <label class="inline">Compare with <select id="compareSel"></select></label>
+    <div class="pickers">
+      <label class="pick"><i style="background:var(--a)"></i>Brand A <select id="selA" aria-label="Brand A"></select></label>
+      <label class="pick"><i style="background:var(--b)"></i>Brand B <select id="selB" aria-label="Brand B"></select></label>
+    </div>
+    <div class="grid g-2">
+      <div>
+        <div class="row-head" style="margin-bottom:8px">
+          <div><h2>Share of voice</h2><p class="sub" style="margin:0">Share of all news mentions in this sector</p></div>
+          <div class="seg" role="group" aria-label="Period">
+            <button type="button" data-sov="7" aria-pressed="true">7 days</button>
+            <button type="button" data-sov="30" aria-pressed="false">30 days</button>
+          </div>
+        </div>
+        <div class="chart-box" style="height:400px"><canvas id="sovChart" aria-label="Share of voice bar chart" role="img"></canvas></div>
       </div>
-      <div class="legend" id="trendLegend"></div>
-      <div class="chart-box"><canvas id="trendChart" aria-label="Daily mentions line chart" role="img"></canvas></div>
+      <div>
+        <h2>Daily coverage</h2><p class="sub">Mentions per day, last 30 days</p>
+        <div class="chart-box"><canvas id="trendChart" aria-label="Daily mentions line chart" role="img"></canvas></div>
+      </div>
     </div>
   </section>
 
@@ -182,7 +174,7 @@ footer.wrap{color:var(--muted);font-size:12px;padding:0 16px 32px}
     <div class="card">
       <h2>Headline tone</h2>
       <p class="sub">Keyword-based, last 30 days. A signal, not a verdict.</p>
-      <div class="legend"><span><i class="sq" style="background:var(--pos)"></i>Positive</span><span><i class="sq" style="background:var(--neu)"></i>Neutral</span><span><i class="sq" style="background:var(--neg)"></i>Negative</span></div>
+      <div class="legend"><span><i style="background:var(--pos)"></i>Positive</span><span><i style="background:var(--neu)"></i>Neutral</span><span><i style="background:var(--neg)"></i>Negative</span></div>
       <div class="table-wrap"><table id="sent"></table></div>
       <h2 style="margin-top:24px">Top outlets</h2>
       <p class="sub">Where this sector gets coverage</p>
@@ -193,7 +185,7 @@ footer.wrap{color:var(--muted);font-size:12px;padding:0 16px 32px}
   <section class="grid g-2" style="margin-bottom:16px">
     <div class="card">
       <h2>Campaign and activity log</h2>
-      <p class="sub">Logged by the team</p>
+      <p class="sub">Logged by hand</p>
       <div id="campaigns"></div>
     </div>
     <div class="card">
@@ -204,8 +196,8 @@ footer.wrap{color:var(--muted);font-size:12px;padding:0 16px 32px}
   </section>
 </main>
 <footer class="wrap">
-  Independent tracker built with Claude Code from public news sources. Mentions count news items, not reach or advertising value.
-  Not an official PSG publication.
+  Independent tracker built with Claude Code from public news sources. Not affiliated with any brand shown.
+  Mentions count news items, not reach or advertising value.
 </footer>
 <div class="tooltip" id="tip"></div>
 
@@ -214,10 +206,10 @@ const $ = s => document.querySelector(s);
 const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const fmt = n => (n ?? 0).toLocaleString("en-GB");
+const SECTOR = { Wealth: "wealth", Insure: "insurance" };
 let D, seg = "Wealth", sovChart, trendChart, sovPeriod = 7;
 const S = () => D.segments[seg];
 
-// Theme toggle (remembered per viewer).
 try { const t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch(e){}
 $("#themeBtn").onclick = () => {
   const dark = document.documentElement.dataset.theme
@@ -229,12 +221,12 @@ $("#themeBtn").onclick = () => {
 };
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", redraw);
 
-// Segment tabs (also set by #wealth / #insure in the URL, so you can share a link to either).
+// Sector tabs (also set by #wealth / #insurance in the URL, so a link can open either).
 function pickFromHash(){
   const h = location.hash.replace("#","").toLowerCase();
-  if (h === "insure") seg = "Insure"; else if (h === "wealth") seg = "Wealth";
+  if (h === "insurance" || h === "insure") seg = "Insure"; else if (h === "wealth") seg = "Wealth";
 }
-document.querySelectorAll(".tab").forEach(t => t.onclick = () => { seg = t.dataset.seg; history.replaceState(null, "", "#" + seg.toLowerCase()); render(); });
+document.querySelectorAll(".tab").forEach(t => t.onclick = () => { seg = t.dataset.seg; history.replaceState(null, "", "#" + SECTOR[seg]); render(); });
 window.addEventListener("hashchange", () => { pickFromHash(); render(); });
 
 fetch("data.json", {cache: "no-store"}).then(r => r.json()).then(d => { D = d; pickFromHash(); render(); })
@@ -242,33 +234,32 @@ fetch("data.json", {cache: "no-store"}).then(r => r.json()).then(d => { D = d; p
 
 function render(){
   if (!D) return;
-  const m = D.meta, home = S().home;
+  const m = D.meta, M = S().metrics, k = M.kpis;
   document.querySelectorAll(".tab").forEach(t => t.setAttribute("aria-selected", t.dataset.seg === seg));
   $("main").setAttribute("aria-labelledby", "tab-" + seg);
-  $("#title").textContent = `${home} vs the market`;
   $("#updated").textContent = `Updated ${m.updated_local} SAST · refreshes every morning`;
   $("#demoBanner").hidden = !m.demo;
 
   const b = S().briefing;
-  $("#briefing").innerHTML = `<span class="dot" aria-hidden="true"></span>
+  $("#briefing").innerHTML = `
     <div class="row-head"><h2>${esc(b.headline)}</h2>
       <span class="tag">${b.source === "claude" ? "Written by Claude" : "Automated summary"}</span></div>
     <ul>${b.points.map(p => `<li>${esc(p)}</li>`).join("")}</ul>
-    ${b.watch && b.watch.length ? `<p style="margin:12px 0 4px 8px;font-weight:600">Suggested actions</p><ul>${b.watch.map(p=>`<li>${esc(p)}</li>`).join("")}</ul>` : ""}`;
+    ${b.watch && b.watch.length ? `<p style="margin:12px 0 4px;font-weight:600">Worth watching</p><ul>${b.watch.map(p=>`<li>${esc(p)}</li>`).join("")}</ul>` : ""}`;
 
-  const k = S().metrics.kpis, dlt = k.home_mentions_7d - k.home_mentions_prev_7d;
+  const dlt = k.mentions_prev_7d ? Math.round(100 * (k.mentions_7d - k.mentions_prev_7d) / k.mentions_prev_7d) : null;
   const tiles = [
-    ["Mentions, 7 days", fmt(k.home_mentions_7d), `${dlt >= 0 ? "▲" : "▼"} ${Math.abs(dlt)} on previous 7 days`],
-    ["Share of voice", `${k.home_share_7d}%`, "Last 7 days"],
-    ["Rank", `#${k.home_rank_7d}`, `of ${k.brands_tracked} brands in this set`],
+    ["Mentions, 7 days", fmt(k.mentions_7d), dlt === null ? `${k.brands_tracked} brands tracked` : `${dlt >= 0 ? "▲" : "▼"} ${Math.abs(dlt)}% on previous 7 days`],
+    ["Share of voice leader", esc(k.leader), `${k.leader_share_7d}% of mentions, last 7 days`],
+    ["Biggest riser", esc(k.riser), `+${k.riser_change} mentions week on week`],
     ["New items", fmt(k.new_items_24h), `Last 24 hours · ${fmt(k.items_30d)} in 30 days`],
   ];
   $("#kpis").innerHTML = tiles.map(([l,v,s]) => `<div class="card kpi"><div class="label">${l}</div><div class="value">${v}</div><div class="delta">${s}</div></div>`).join("");
 
-  const brands = S().metrics.brands, others = brands.filter(x => x !== home);
-  const lead = S().metrics.share_of_voice_7d.find(r => r.brand !== home)?.brand || others[0];
-  $("#compareSel").innerHTML = others.map(o => `<option ${o===lead?"selected":""}>${esc(o)}</option>`).join("");
-  $("#compareSel").onchange = drawCharts;
+  const brands = M.brands, ranked = M.share_of_voice_7d.map(r => r.brand);
+  const opts = sel => brands.map(x => `<option ${x===sel?"selected":""}>${esc(x)}</option>`).join("");
+  $("#selA").innerHTML = opts(ranked[0]); $("#selB").innerHTML = opts(ranked[1]);
+  $("#selA").onchange = $("#selB").onchange = drawCharts;
   document.querySelectorAll("[data-sov]").forEach(btn => btn.onclick = () => {
     sovPeriod = +btn.dataset.sov;
     document.querySelectorAll("[data-sov]").forEach(x => x.setAttribute("aria-pressed", x === btn));
@@ -276,7 +267,7 @@ function render(){
   });
 
   $("#fBrand").innerHTML = '<option value="">All brands</option>' + brands.map(x => `<option>${esc(x)}</option>`).join("");
-  $("#fCat").innerHTML = '<option value="">All categories</option>' + S().metrics.categories.map(c => `<option>${esc(c)}</option>`).join("");
+  $("#fCat").innerHTML = '<option value="">All categories</option>' + M.categories.map(c => `<option>${esc(c)}</option>`).join("");
   $("#fText").value = "";
   ["#fBrand","#fCat","#fText"].forEach(s => $(s).oninput = renderFeed);
 
@@ -285,23 +276,21 @@ function render(){
 function redraw(){ if (!D) return; drawCharts(); renderHeat(); renderSent(); }
 
 function tooltipOpts(){
-  return { backgroundColor: "#241F21", titleColor: "#fff", bodyColor: "#fff", padding: 10, cornerRadius: 4, boxPadding: 4,
-           titleFont: { family: "IBM Plex Sans", weight: 600 }, bodyFont: { family: "IBM Plex Sans" } };
+  return { backgroundColor: "#111418", titleColor: "#fff", bodyColor: "#fff", padding: 10, cornerRadius: 6, boxPadding: 4 };
 }
-
-// Writes each bar's value at its end (direct labels).
 const barLabels = { id: "barLabels", afterDatasetsDraw(chart){
   const { ctx } = chart, meta = chart.getDatasetMeta(0);
-  ctx.save(); ctx.font = "500 12px IBM Plex Sans, Arial"; ctx.fillStyle = css("--ink-2"); ctx.textBaseline = "middle";
+  ctx.save(); ctx.font = "500 12px Inter, system-ui, sans-serif"; ctx.fillStyle = css("--ink-2"); ctx.textBaseline = "middle";
   meta.data.forEach((bar, i) => ctx.fillText(chart.data.datasets[0].data[i] + "%", bar.x + 6, bar.y));
   ctx.restore();
 }};
 
 function drawCharts(){
-  const home = S().home, M = S().metrics;
+  const M = S().metrics, A = $("#selA").value, B = $("#selB").value;
   const rows = sovPeriod === 7 ? M.share_of_voice_7d : M.share_of_voice_30d;
-  const homeC = css("--home"), neutral = css("--neutral"), grid = css("--grid");
-  Chart.defaults.font.family = "IBM Plex Sans, Arial, sans-serif";
+  const cA = css("--a"), cB = css("--b"), other = css("--other"), grid = css("--grid");
+  const colour = name => name === A ? cA : name === B ? cB : other;
+  Chart.defaults.font.family = "Inter, system-ui, sans-serif";
   Chart.defaults.color = css("--muted");
 
   sovChart && sovChart.destroy();
@@ -309,32 +298,30 @@ function drawCharts(){
   sovChart = new Chart($("#sovChart"), {
     type: "bar",
     data: { labels: rows.map(r => r.brand),
-      datasets: [{ data: rows.map(r => r.share), backgroundColor: rows.map(r => r.brand === home ? homeC : neutral),
+      datasets: [{ data: rows.map(r => r.share), backgroundColor: rows.map(r => colour(r.brand)),
         borderRadius: 4, borderSkipped: "start", barThickness: 16 }] },
     plugins: [barLabels],
     options: { responsive: true, maintainAspectRatio: false, animation: false, indexAxis: "y",
       layout: { padding: { right: 36 } },
       scales: { x: { max: Math.ceil((maxShare + 2) / 5) * 5, grid: { color: grid }, border: { display: false }, ticks: { callback: v => v + "%" } },
                 y: { grid: { display: false }, border: { display: false },
-                     ticks: { color: c => rows[c.index]?.brand === home ? css("--ink") : css("--ink-2"),
-                              font: c => ({ weight: rows[c.index]?.brand === home ? 600 : 400 }) } } },
+                     ticks: { color: c => [A,B].includes(rows[c.index]?.brand) ? css("--ink") : css("--ink-2"),
+                              font: c => ({ weight: [A,B].includes(rows[c.index]?.brand) ? 600 : 400 }) } } },
       plugins: { legend: { display: false }, tooltip: { ...tooltipOpts(), displayColors: false,
         callbacks: { label: c => `${rows[c.dataIndex].share}% · ${fmt(rows[c.dataIndex].mentions)} mentions` } } } }
   });
 
-  const cmp = $("#compareSel").value, compare = css("--compare");
   const days = M.daily.days, Sr = M.daily.series;
-  $("#trendLegend").innerHTML = `<span><i style="background:${homeC}"></i>${esc(home)}</span><span><i style="background:${compare}"></i>${esc(cmp)}</span>`;
   trendChart && trendChart.destroy();
   trendChart = new Chart($("#trendChart"), {
     type: "line",
     data: { labels: days.map(d => new Date(d).toLocaleDateString("en-GB", { day: "numeric", month: "short" })),
       datasets: [
-        { label: home, data: Sr[home], borderColor: homeC, backgroundColor: homeC, borderWidth: 2, pointRadius: 0, pointHoverRadius: 5, cubicInterpolationMode: "monotone" },
-        { label: cmp, data: Sr[cmp], borderColor: compare, backgroundColor: compare, borderWidth: 2, pointRadius: 0, pointHoverRadius: 5, cubicInterpolationMode: "monotone" },
+        { label: A, data: Sr[A], borderColor: cA, backgroundColor: cA, borderWidth: 2, pointRadius: 0, pointHoverRadius: 5, cubicInterpolationMode: "monotone" },
+        { label: B, data: Sr[B], borderColor: cB, backgroundColor: cB, borderWidth: 2, pointRadius: 0, pointHoverRadius: 5, cubicInterpolationMode: "monotone" },
       ] },
     options: { responsive: true, maintainAspectRatio: false, animation: false, interaction: { mode: "index", intersect: false },
-      plugins: { legend: { display: false }, tooltip: tooltipOpts() },
+      plugins: { legend: { display: true, position: "top", align: "start", labels: { boxWidth: 12, boxHeight: 3, color: css("--ink-2") } }, tooltip: tooltipOpts() },
       scales: { x: { grid: { display: false }, ticks: { maxTicksLimit: 8 } },
                 y: { beginAtZero: true, grid: { color: grid }, border: { display: false }, ticks: { precision: 0 } } } }
   });
@@ -342,17 +329,17 @@ function drawCharts(){
 
 function mix(a, b, t){
   const p = h => h.replace("#","").match(/../g).map(x => parseInt(x,16));
-  const [A,B] = [p(a),p(b)];
-  return "#" + A.map((v,i) => Math.round(v + (B[i]-v)*t).toString(16).padStart(2,"0")).join("");
+  const [X,Y] = [p(a),p(b)];
+  return "#" + X.map((v,i) => Math.round(v + (Y[i]-v)*t).toString(16).padStart(2,"0")).join("");
 }
 
 function renderHeat(){
-  const M = S().metrics, home = S().home, cats = M.categories;
+  const M = S().metrics, cats = M.categories;
   const max = Math.max(1, ...M.brands.flatMap(b => cats.map(c => M.category_matrix[b][c])));
   const lo = css("--heat-0"), hi = css("--heat-1");
   let h = `<thead><tr><th>Brand</th>${cats.map(c => `<th class="rot">${esc(c)}</th>`).join("")}</tr></thead><tbody>`;
   for (const b of M.brands){
-    h += `<tr class="${b===home?"home":""}"><td>${esc(b)}</td>` + cats.map(c => {
+    h += `<tr><td>${esc(b)}</td>` + cats.map(c => {
       const v = M.category_matrix[b][c], t = v / max;
       const bg = mix(lo, hi, Math.pow(t, .8)), ink = t > .5 ? "#fff" : css("--ink");
       return `<td class="cell" style="background:${bg};color:${ink}" data-tip="${esc(b)} · ${esc(c)}: ${v}">${v || ""}</td>`;
@@ -363,20 +350,22 @@ function renderHeat(){
 }
 
 function renderSent(){
-  const M = S().metrics, home = S().home;
+  const M = S().metrics;
   const rows = M.brands.map(b => { const s = M.sentiment_30d[b], t = s.positive+s.neutral+s.negative || 1;
     return { b, ...s, t, net: Math.round(100*(s.positive-s.negative)/t) }; }).sort((a,z) => z.net - a.net);
   $("#sent").innerHTML = `<thead><tr><th>Brand</th><th>Tone mix</th><th class="num">Net</th></tr></thead><tbody>` +
-    rows.map(r => `<tr class="${r.b===home?"home":""}"><td>${esc(r.b)}</td><td><div class="stack" data-tip="${r.positive} positive · ${r.neutral} neutral · ${r.negative} negative">
+    rows.map(r => `<tr><td>${esc(r.b)}</td><td><div class="stack" data-tip="${r.positive} positive · ${r.neutral} neutral · ${r.negative} negative">
       <span style="width:${100*r.positive/r.t}%;background:var(--pos)"></span><span style="width:${100*r.neutral/r.t}%;background:var(--neu)"></span><span style="width:${100*r.negative/r.t}%;background:var(--neg)"></span></div></td>
       <td class="num">${r.net > 0 ? "+" : ""}${r.net}</td></tr>`).join("") + "</tbody>";
   bindTips($("#sent"));
 }
 
 function renderOutlets(){
-  const home = S().home;
-  $("#outlets").innerHTML = `<thead><tr><th>Outlet</th><th class="num">Mentions</th><th class="num">${esc(home)}</th></tr></thead><tbody>` +
-    S().metrics.top_outlets.slice(0,10).map(o => `<tr><td>${esc(o.source)}</td><td class="num">${fmt(o.mentions)}</td><td class="num">${fmt(o.by_brand[home]||0)}</td></tr>`).join("") + "</tbody>";
+  $("#outlets").innerHTML = `<thead><tr><th>Outlet</th><th class="num">Mentions</th><th>Most covered brand</th></tr></thead><tbody>` +
+    S().metrics.top_outlets.slice(0,10).map(o => {
+      const top = Object.entries(o.by_brand).sort((a,z) => z[1]-a[1])[0] || ["",0];
+      return `<tr><td>${esc(o.source)}</td><td class="num">${fmt(o.mentions)}</td><td>${esc(top[0])} <span style="color:var(--muted)">(${top[1]})</span></td></tr>`;
+    }).join("") + "</tbody>";
 }
 
 function renderFeed(){
@@ -388,14 +377,14 @@ function renderFeed(){
 }
 
 function renderManual(){
-  const brands = new Set(S().metrics.brands), home = S().home;
+  const brands = new Set(S().metrics.brands);
   const c = D.campaigns.filter(r => brands.has(r.brand));
   $("#campaigns").innerHTML = c.length ? `<div class="table-wrap"><table><thead><tr><th>Date</th><th>Brand</th><th>Activity</th><th>Channel</th></tr></thead><tbody>` +
     c.slice(0,25).map(r => `<tr><td>${esc(r.date_spotted)}</td><td>${esc(r.brand)}</td><td>${r.link ? `<a href="${esc(r.link)}" target="_blank" rel="noopener">${esc(r.campaign_or_activity)}</a>` : esc(r.campaign_or_activity)}</td><td>${esc(r.channel)}</td></tr>`).join("") + "</tbody></table></div>"
-    : `<p class="empty">No ${seg.toLowerCase()} campaigns logged yet. Add a row to <code>data/campaigns.csv</code> when you spot a competitor campaign, sponsorship or event.</p>`;
+    : `<p class="empty">No ${SECTOR[seg]} campaigns logged yet. Add a row to <code>data/campaigns.csv</code> when you spot a campaign, sponsorship or event.</p>`;
   const s = D.social.filter(r => brands.has(r.brand));
   $("#social").innerHTML = s.length ? `<div class="table-wrap"><table><thead><tr><th>Brand</th><th>Platform</th><th class="num">Followers</th><th class="num">Change</th></tr></thead><tbody>` +
-    s.map(r => `<tr class="${r.brand===home?"home":""}"><td>${esc(r.brand)}</td><td>${esc(r.platform)}</td><td class="num">${fmt(r.followers)}</td><td class="num">${r.change==null?"–":(r.change>0?"+":"")+fmt(r.change)}</td></tr>`).join("") + "</tbody></table></div>"
+    s.map(r => `<tr><td>${esc(r.brand)}</td><td>${esc(r.platform)}</td><td class="num">${fmt(r.followers)}</td><td class="num">${r.change==null?"–":(r.change>0?"+":"")+fmt(r.change)}</td></tr>`).join("") + "</tbody></table></div>"
     : `<p class="empty">No follower counts logged yet. Add rows to <code>data/social.csv</code>, for example monthly LinkedIn followers per brand.</p>`;
 }
 

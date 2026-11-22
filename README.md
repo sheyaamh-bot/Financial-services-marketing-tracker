@@ -1,16 +1,16 @@
-# PSG Marketing & PR Competitor Tracker
+# Financial Services Marketing Tracker
 
-A daily tracker of competitor marketing and PR activity in South African financial services. It tracks two competitor sets:
+An independent, daily view of marketing and PR activity across South African financial services. Built with Claude Code.
 
-- **Wealth:** PSG Wealth vs Sanlam (incl. Glacier), Old Mutual, Discovery, Momentum, Liberty, Investec, Allan Gray, Coronation, Ninety One, Alexander Forbes, Citadel, Sygnia and Brenthurst.
-- **Insure:** PSG Insure vs Santam, OUTsurance, Hollard, Discovery Insure, Old Mutual Insure, King Price, MiWay, Indwe, Aon SA and Marsh SA.
+It tracks two sectors:
 
-Share of voice is calculated within each set. Every morning it produces:
+- **Wealth:** Alexander Forbes, Allan Gray, Brenthurst, Citadel, Coronation, Discovery, Investec, Liberty, Momentum, Ninety One, Old Mutual, PSG Wealth, Sanlam (incl. Glacier) and Sygnia.
+- **Insurance:** Aon SA, Discovery Insure, Hollard, Indwe, King Price, Marsh SA, MiWay, Old Mutual Insure, OUTsurance, PSG Insure and Santam.
 
-- **A dashboard** (`site/index.html`) in PSG brand colours, with a Wealth | Insure switch. Add `#insure` to the link to open the Insure view.
-- **An Excel workbook** (`site/PSG_Competitor_Tracker.xlsx`), downloadable from the dashboard.
+Share of voice is calculated within each sector. Every morning it produces:
 
-Built with Claude Code.
+- **A dashboard** (`site/index.html`) with a Wealth | Insurance switch and a picker to compare any two brands. Add `#insurance` to the link to open the Insurance view.
+- **An Excel workbook** (`site/Financial_Services_Marketing_Tracker.xlsx`), downloadable from the dashboard.
 
 ## What it tracks
 
@@ -21,11 +21,11 @@ Built with Claude Code.
 | Activity by type: campaigns, sponsorships, awards, appointments, launches, results, CSR, thought leadership, digital, deals, reputation | Headline keywords | Automatic |
 | Headline tone | Headline keywords | Automatic |
 | Top outlets | Google News | Automatic |
-| Morning briefing | Claude (or rules if no API key) | Automatic |
+| Morning briefing | Rules, or Claude if an API key is set | Automatic |
 | Campaign and activity log | `data/campaigns.csv` | Manual |
 | Social followers | `data/social.csv` | Manual |
 
-Edit `config.json` to add or remove brands, change search terms or tune the category keywords. Each brand sits under its segment (`Wealth` or `Insure`).
+Edit `config.json` to add or remove brands, change search terms or tune the category keywords.
 
 ## How it runs
 
@@ -37,15 +37,13 @@ Edit `config.json` to add or remove brands, change search terms or tune the cate
 
 ## Set-up (one-off)
 
-1. Merge this branch into the default branch. Scheduled workflows only run there.
-2. In **Settings → Pages**, set **Source** to **GitHub Actions**.
+1. In **Settings → Pages**, set **Source** to **GitHub Actions**.
+2. In **Actions → Daily tracker update → Run workflow**, run it once to replace the sample data with live coverage.
 3. Optional: in **Settings → Secrets and variables → Actions**, add `ANTHROPIC_API_KEY` so Claude writes the morning briefing.
-4. In **Actions → Daily tracker update → Run workflow**, run it once to replace the sample data with live coverage.
 
 ## Run it locally
 
 ```bash
-cd financial-services-marketing-tracker
 pip install -r requirements.txt
 python tracker.py          # live run
 python tracker.py --demo   # sample data, no network
@@ -63,12 +61,12 @@ date_spotted,brand,campaign_or_activity,channel,type,link,notes
 
 ```csv
 date,brand,platform,followers,notes
-2026-11-01,PSG Wealth,LinkedIn,52000,
+2026-11-01,Allan Gray,LinkedIn,52000,
 ```
 
 ## Limits to know
 
+- Not affiliated with any brand shown.
 - Mentions are news items. They are not reach, impressions or advertising value equivalent (AVE).
 - Categories and tone come from headline keywords. Treat them as signals and tune `config.json` over time.
-- Google News RSS suits internal monitoring. For commercial redistribution, use a licensed media-monitoring feed.
-- Brand colours follow the current PSG brand: cyan #00AEEF, charcoal #353E43, action blue #0054FF, yellow #FFDE21 and magenta #D4055C, with IBM Plex Sans standing in for PSG Plex Sans. Chart marks use a slightly deeper cyan (#0096D6) so they stay legible on white.
+- Google News RSS suits monitoring and demonstration. For commercial redistribution, use a licensed media-monitoring feed.

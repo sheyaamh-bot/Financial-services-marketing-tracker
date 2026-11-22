@@ -1,19 +1,20 @@
 #!/usr/bin/env python3
-"""PSG Marketing & PR Competitor Tracker.
+"""Financial Services Marketing Tracker.
 
-Tracks two competitor sets, each against its own PSG business:
-  * Wealth: PSG Wealth vs wealth managers, asset managers and advice firms.
-  * Insure: PSG Insure vs insurers and broker networks.
+An independent, daily view of marketing and PR activity across South African
+financial services, in two sectors:
+  * Wealth: wealth managers, asset managers and advice firms.
+  * Insure: insurers and broker networks.
 
 Runs once a day (see .github/workflows/daily-update.yml). Each run:
 
 1. Pulls the latest news coverage for every brand from Google News RSS.
 2. Tags each item with a marketing/PR category and a simple tone score.
 3. Adds new items to a rolling history (data/mentions.json).
-4. Writes a morning briefing per segment (Claude when ANTHROPIC_API_KEY is set,
+4. Writes a morning briefing per sector (Claude when ANTHROPIC_API_KEY is set,
    otherwise rule-based).
 5. Builds the dashboard data (site/data.json) and the Excel workbook
-   (site/PSG_Competitor_Tracker.xlsx).
+   (site/Financial_Services_Marketing_Tracker.xlsx).
 
 Usage:
     python tracker.py            # live run
@@ -38,7 +39,7 @@ from pathlib import Path
 
 import requests
 from openpyxl import Workbook
-from openpyxl.chart import BarChart, LineChart, Reference
+from openpyxl.chart import BarChart, Reference
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils import get_column_letter
 
@@ -46,16 +47,16 @@ ROOT = Path(__file__).resolve().parent
 DATA = ROOT / "data"
 SITE = ROOT / "site"
 SAST = timezone(timedelta(hours=2))
+WORKBOOK = "Financial_Services_Marketing_Tracker.xlsx"
 
-# PSG brand colours (from the current PSG brand). Keep in step with site/index.html.
-CHARCOAL = "353E43"
-INK = "241F21"
-CYAN = "00AEEF"       # PSG cyan
-CHART_CYAN = "0096D6"  # deeper cyan for chart marks on white (passes 3:1 contrast)
-ACTION = "0054FF"      # links and buttons
-PALE = "F2F9FD"
+# Neutral palette (keep in step with site/index.html).
+SLATE = "1F2933"
+INK = "111418"
+MUTED = "5B6570"
+ACCENT = "2A78D6"
+PALE = "F1F5FA"
 WHITE = "FFFFFF"
-FONT = "Arial"         # PSG Plex Sans is not installed on most PCs; Arial is the brand fallback
+FONT = "Arial"
 
 TONE = {1: "Positive", 0: "Neutral", -1: "Negative"}
 
@@ -79,7 +80,7 @@ def fetch_google_news(brand: dict, cfg: dict) -> list[dict]:
         + urllib.parse.quote(q)
         + f"&hl={region['hl']}&gl={region['gl']}&ceid={region['ceid']}"
     )
-    resp = requests.get(url, timeout=30, headers={"User-Agent": "competitor-tracker/1.0"})
+    resp = requests.get(url, timeout=30, headers={"User-Agent": "fs-marketing-tracker/1.0"})
     resp.raise_for_status()
     root = ET.fromstring(resp.content)
     items = []
@@ -162,7 +163,7 @@ def share_of_voice(items: list[dict], brands: list[str]) -> list[dict]:
     return sorted(rows, key=lambda r: r["mentions"], reverse=True)
 
 
-def build_metrics(items: list[dict], brands: list[str], home: str, cfg: dict, now: datetime) -> dict:
+def build_metrics(items: list[dict], brands: list[str], cfg: dict, now: datetime) -> dict:
     cats = list(cfg["categories"].keys()) + ["Other coverage"]
     last7, last30, last1 = window(items, 7, now), window(items, 30, now), window(items, 1, now)
     cut7 = now - timedelta(days=7)
@@ -170,6 +171,7 @@ def build_metrics(items: list[dict], brands: list[str], home: str, cfg: dict, no
 
     sov7, sov30 = share_of_voice(last7, brands), share_of_voice(last30, brands)
     prev_counts = Counter(i["brand"] for i in prev7)
+    sov7 = [dict(r, prev_mentions=prev_counts.get(r["brand"], 0)) for r in sov7]
 
     days = [(now - timedelta(days=d)).astimezone(SAST).date().isoformat() for d in range(29, -1, -1)]
     daily = {b: {d: 0 for d in days} for b in brands}
@@ -191,21 +193,27 @@ def build_metrics(items: list[dict], brands: list[str], home: str, cfg: dict, no
     for i in last30:
         by_outlet[i["source"]][i["brand"]] += 1
 
-    home_rank = next((n + 1 for n, r in enumerate(sov7) if r["brand"] == home), None)
-    home_7 = next((r for r in sov7 if r["brand"] == home), {"mentions": 0, "share": 0})
+    top_cat_7 = Counter(i.get("category", "Other coverage") for i in last7
+                        if i.get("category") != "Other coverage").most_common(1)
+    riser = max(sov7, key=lambda r: r["mentions"] - r["prev_mentions"])
+    leader = sov7[0]
     return {
         "brands": brands,
         "categories": cats,
         "kpis": {
-            "home_mentions_7d": home_7["mentions"],
-            "home_mentions_prev_7d": prev_counts.get(home, 0),
-            "home_share_7d": home_7["share"],
-            "home_rank_7d": home_rank,
+            "mentions_7d": len(last7),
+            "mentions_prev_7d": len(prev7),
+            "leader": leader["brand"],
+            "leader_share_7d": leader["share"],
+            "riser": riser["brand"],
+            "riser_change": riser["mentions"] - riser["prev_mentions"],
+            "top_category_7d": top_cat_7[0][0] if top_cat_7 else None,
+            "top_category_count_7d": top_cat_7[0][1] if top_cat_7 else 0,
             "brands_tracked": len(brands),
             "new_items_24h": len(last1),
             "items_30d": len(last30),
         },
-        "share_of_voice_7d": [dict(r, prev_mentions=prev_counts.get(r["brand"], 0)) for r in sov7],
+        "share_of_voice_7d": sov7,
         "share_of_voice_30d": sov30,
         "daily": {"days": days, "series": {b: [daily[b][d] for d in days] for b in brands}},
         "category_matrix": matrix,
@@ -217,30 +225,39 @@ def build_metrics(items: list[dict], brands: list[str], home: str, cfg: dict, no
 # --------------------------------------------------------------------------- #
 # Morning briefing
 # --------------------------------------------------------------------------- #
-def rule_based_briefing(metrics: dict, items: list[dict], home: str, now: datetime) -> dict:
+def pct_change(now_v: int, before: int) -> str:
+    if before == 0:
+        return "with no coverage the week before"
+    p = round(100 * (now_v - before) / before)
+    if p == 0:
+        return "the same as the week before"
+    return f"{'up' if p > 0 else 'down'} {abs(p)}% on the week before"
+
+
+def rule_based_briefing(segment: str, metrics: dict, items: list[dict], now: datetime) -> dict:
     k = metrics["kpis"]
     sov = metrics["share_of_voice_7d"]
-    leader = next((r for r in sov if r["brand"] != home), sov[0])
-    delta = k["home_mentions_7d"] - k["home_mentions_prev_7d"]
-    direction = "up" if delta > 0 else "down" if delta < 0 else "flat"
-    riser = max(sov, key=lambda r: r["mentions"] - r["prev_mentions"])
+    faller = min(sov, key=lambda r: r["mentions"] - r["prev_mentions"])
     risk = [i for i in window(items, 7, now) if i.get("category") == "Reputation & regulatory"]
+    runners = " and ".join(f"{r['brand']} ({r['share']}%)" for r in sov[1:3])
+    noun = {"Insure": "insurance"}.get(segment, segment.lower())
     points = [
-        f"{home} earned {k['home_mentions_7d']} mentions in the past 7 days "
-        + (f"({direction} {abs(delta)} on the week before). " if delta else "(the same as the week before). ")
-        + f"That is a {k['home_share_7d']}% share of voice, ranking #{k['home_rank_7d']} of {k['brands_tracked']}.",
-        f"{leader['brand']} leads the competitor set with {leader['share']}% share of voice.",
-        f"Biggest riser: {riser['brand']}, up {riser['mentions'] - riser['prev_mentions']} mentions week on week.",
-        f"{k['new_items_24h']} new items in the last 24 hours.",
+        f"{k['mentions_7d']} news mentions across {k['brands_tracked']} {noun} brands in the past 7 days, "
+        f"{pct_change(k['mentions_7d'], k['mentions_prev_7d'])}.",
+        f"{k['leader']} leads share of voice with {k['leader_share_7d']}%, followed by {runners}.",
+        f"Biggest riser: {k['riser']}, up {k['riser_change']} mentions week on week. "
+        f"Biggest faller: {faller['brand']}, down {abs(faller['mentions'] - faller['prev_mentions'])}.",
     ]
+    if k["top_category_7d"]:
+        points.append(f"Most common activity this week: {k['top_category_7d']} ({k['top_category_count_7d']} items).")
     if risk:
         points.append(f"{len(risk)} reputation or regulatory items this week, involving "
                       + ", ".join(sorted({i['brand'] for i in risk})) + ".")
-    return {"source": "rules", "headline": f"{home} ranks #{k['home_rank_7d']} for share of voice this week",
+    return {"source": "rules", "headline": f"{k['leader']} leads {noun} share of voice this week",
             "points": points, "watch": []}
 
 
-def claude_briefing(segment: str, metrics: dict, items: list[dict], home: str, cfg: dict, now: datetime) -> dict | None:
+def claude_briefing(segment: str, metrics: dict, items: list[dict], cfg: dict, now: datetime) -> dict | None:
     if not os.environ.get("ANTHROPIC_API_KEY") or not cfg["claude"].get("enabled_if_key_present", True):
         return None
     try:
@@ -250,8 +267,7 @@ def claude_briefing(segment: str, metrics: dict, items: list[dict], home: str, c
 
     recent = sorted(window(items, 7, now), key=lambda i: i["published"], reverse=True)[:150]
     payload = {
-        "segment": segment,
-        "home_brand": home,
+        "sector": segment,
         "kpis": metrics["kpis"],
         "share_of_voice_7d": metrics["share_of_voice_7d"],
         "headlines_last_7_days": [
@@ -260,18 +276,18 @@ def claude_briefing(segment: str, metrics: dict, items: list[dict], home: str, c
         ],
     }
     system = (
-        "You write the morning competitor briefing for the marketing and PR team at PSG Financial Services, "
-        "a South African wealth, asset management and insurance group. Use British English, plain language "
-        "and the active voice. No exclamation marks. Keep each point to one idea and at most two sentences. "
-        "Focus on what matters for marketing and PR: campaigns, sponsorships, awards, spokespeople, launches, "
-        "share of voice shifts and reputation risks. Only state facts found in the data you are given."
+        "You write an independent morning briefing on marketing and PR activity in South African financial "
+        "services, for marketers across the industry. Treat every brand even-handedly. Use British English, "
+        "plain language and the active voice. No exclamation marks. Keep each point to one idea and at most "
+        "two sentences. Focus on campaigns, sponsorships, awards, spokespeople, launches, share of voice "
+        "shifts and reputation risks. Only state facts found in the data you are given."
     )
     schema = {
         "type": "object",
         "properties": {
             "headline": {"type": "string", "description": "One-line summary of the day, under 15 words."},
             "points": {"type": "array", "items": {"type": "string"}, "description": "4 to 6 briefing points."},
-            "watch": {"type": "array", "items": {"type": "string"}, "description": "1 to 3 suggested actions for the PSG team."},
+            "watch": {"type": "array", "items": {"type": "string"}, "description": "1 to 3 things worth watching."},
         },
         "required": ["headline", "points", "watch"],
         "additionalProperties": False,
@@ -327,12 +343,11 @@ def social_summary(rows: list[dict]) -> list[dict]:
 # --------------------------------------------------------------------------- #
 # Excel
 # --------------------------------------------------------------------------- #
-HEAD_FILL = PatternFill("solid", fgColor=CHARCOAL)
+HEAD_FILL = PatternFill("solid", fgColor=SLATE)
 HEAD_FONT = Font(bold=True, color=WHITE, name=FONT, size=10)
-BODY_FONT = Font(name=FONT, size=10, color=CHARCOAL)
-HOME_FILL = PatternFill("solid", fgColor=PALE)
-THIN = Border(bottom=Side(style="thin", color="D9DEE1"))
-CYAN_RULE = Border(bottom=Side(style="thick", color=CYAN))
+BODY_FONT = Font(name=FONT, size=10, color=INK)
+THIN = Border(bottom=Side(style="thin", color="DDE1E6"))
+RULE = Border(bottom=Side(style="medium", color=ACCENT))
 
 
 def style_table(ws, header_row: int, ncols: int, widths: list[int], wrap_cols=("C",)):
@@ -349,7 +364,7 @@ def style_table(ws, header_row: int, ncols: int, widths: list[int], wrap_cols=("
     for row in ws.iter_rows(min_row=header_row + 1, max_row=ws.max_row, max_col=ncols):
         for cell in row:
             cell.border = THIN
-            if cell.font.color is None or cell.font.color.rgb in (None, "FF000000"):
+            if cell.hyperlink is None:
                 cell.font = BODY_FONT
             cell.alignment = Alignment(vertical="top", wrap_text=cell.column_letter in wrap_cols)
 
@@ -358,38 +373,29 @@ def title_block(ws, title: str, subtitle: str):
     ws["A1"] = title
     ws["A1"].font = Font(name=FONT, bold=True, size=16, color=INK)
     ws["A2"] = subtitle
-    ws["A2"].font = Font(name=FONT, italic=True, size=10, color="5F6B72")
-    ws.sheet_properties.tabColor = CYAN
+    ws["A2"].font = Font(name=FONT, italic=True, size=10, color=MUTED)
+    ws.sheet_properties.tabColor = ACCENT
 
 
-def highlight_home(ws, header_row: int, ncols: int, home: str, col: int = 1):
-    for r in range(header_row + 1, ws.max_row + 1):
-        if ws.cell(row=r, column=col).value == home:
-            for c in range(1, ncols + 1):
-                ws.cell(row=r, column=c).fill = HOME_FILL
-                ws.cell(row=r, column=c).font = Font(name=FONT, bold=True, size=10, color=INK)
-
-
-def write_segment_sheets(wb, seg: str, S: dict, cfg: dict):
-    home, m = S["home"], S["metrics"]
+def write_segment_sheets(wb, seg: str, S: dict):
+    m = S["metrics"]
 
     ws = wb.create_sheet(f"{seg} share of voice")
-    title_block(ws, f"{seg}: share of voice", f"{home} vs competitors. Share = brand mentions ÷ all mentions in this set.")
+    title_block(ws, f"{seg}: share of voice", "Share = brand mentions ÷ all mentions in this sector.")
     ws.append([])
     ws.append(["Brand", "Mentions (7d)", "Previous 7d", "Change", "Share 7d (%)", "Mentions (30d)", "Share 30d (%)"])
     s30 = {r["brand"]: r for r in m["share_of_voice_30d"]}
     for row in m["share_of_voice_7d"]:
         ws.append([row["brand"], row["mentions"], row["prev_mentions"], row["mentions"] - row["prev_mentions"],
                    row["share"], s30[row["brand"]]["mentions"], s30[row["brand"]]["share"]])
-    style_table(ws, 4, 7, [20, 14, 13, 10, 13, 15, 13])
-    highlight_home(ws, 4, 7, home)
+    style_table(ws, 4, 7, [20, 14, 13, 10, 13, 15, 13], wrap_cols=())
     chart = BarChart()
     chart.type, chart.title = "bar", "Share of voice, last 30 days (%)"
     chart.add_data(Reference(ws, min_col=7, min_row=4, max_row=ws.max_row), titles_from_data=True)
     chart.set_categories(Reference(ws, min_col=1, min_row=5, max_row=ws.max_row))
     chart.legend, chart.height, chart.width = None, 9, 16
-    chart.series[0].graphicalProperties.solidFill = CHART_CYAN
-    chart.series[0].graphicalProperties.line.solidFill = CHART_CYAN
+    chart.series[0].graphicalProperties.solidFill = ACCENT
+    chart.series[0].graphicalProperties.line.solidFill = ACCENT
     chart.y_axis.majorGridlines = None
     ws.add_chart(chart, "I4")
 
@@ -402,7 +408,6 @@ def write_segment_sheets(wb, seg: str, S: dict, cfg: dict):
         vals = [m["category_matrix"][b][c] for c in cats]
         ws.append([b] + vals + [sum(vals)])
     style_table(ws, 4, len(cats) + 2, [18] + [14] * (len(cats) + 1), wrap_cols=())
-    highlight_home(ws, 4, len(cats) + 2, home)
 
     ws = wb.create_sheet(f"{seg} daily trend")
     title_block(ws, f"{seg}: daily coverage", "Mentions per day, last 30 days.")
@@ -411,14 +416,6 @@ def write_segment_sheets(wb, seg: str, S: dict, cfg: dict):
     for n, d in enumerate(m["daily"]["days"]):
         ws.append([d] + [m["daily"]["series"][b][n] for b in m["brands"]])
     style_table(ws, 4, len(m["brands"]) + 1, [12] + [13] * len(m["brands"]), wrap_cols=())
-    line = LineChart()
-    line.title, line.height, line.width, line.legend = f"{home} daily mentions", 8, 18, None
-    home_col = m["brands"].index(home) + 2
-    line.add_data(Reference(ws, min_col=home_col, min_row=4, max_row=ws.max_row), titles_from_data=True)
-    line.set_categories(Reference(ws, min_col=1, min_row=5, max_row=ws.max_row))
-    line.series[0].graphicalProperties.line.solidFill = CHART_CYAN
-    line.series[0].graphicalProperties.line.width = 22000
-    ws.add_chart(line, f"{get_column_letter(len(m['brands']) + 3)}4")
 
 
 def build_excel(data: dict, items: list[dict], cfg: dict, path: Path):
@@ -426,7 +423,6 @@ def build_excel(data: dict, items: list[dict], cfg: dict, path: Path):
     segs = data["segments"]
     wb = Workbook()
 
-    # Briefing (both segments)
     ws = wb.active
     ws.title = "Briefing"
     title_block(ws, cfg["tracker_name"], f"Updated {updated} SAST" + ("  ·  SAMPLE DATA" if data["meta"]["demo"] else ""))
@@ -434,68 +430,64 @@ def build_excel(data: dict, items: list[dict], cfg: dict, path: Path):
     for seg, S in segs.items():
         k, b = S["metrics"]["kpis"], S["briefing"]
         c = ws.cell(row=r, column=1, value=f"{seg.upper()}  ·  {b['headline']}")
-        c.font, c.border = Font(name=FONT, bold=True, size=13, color=INK), CYAN_RULE
+        c.font, c.border = Font(name=FONT, bold=True, size=13, color=INK), RULE
         r += 2
         for p in b["points"]:
-            ws.cell(row=r, column=1, value="•  " + p).alignment = Alignment(wrap_text=True, vertical="top")
-            ws.cell(row=r, column=1).font = BODY_FONT
+            cell = ws.cell(row=r, column=1, value="•  " + p)
+            cell.alignment, cell.font = Alignment(wrap_text=True, vertical="top"), BODY_FONT
             r += 1
         for p in b.get("watch") or []:
-            ws.cell(row=r, column=1, value="→  " + p).font = Font(name=FONT, size=10, color=ACTION)
+            ws.cell(row=r, column=1, value="→  " + p).font = Font(name=FONT, size=10, color=ACCENT)
             r += 1
         r += 1
-        for label, val in [(f"{S['home']} mentions (7 days)", k["home_mentions_7d"]),
-                           ("Previous 7 days", k["home_mentions_prev_7d"]),
-                           ("Share of voice (7 days)", f"{k['home_share_7d']}%"),
-                           ("Rank (7 days)", f"#{k['home_rank_7d']} of {k['brands_tracked']}")]:
-            ws.cell(row=r, column=1, value=label).font = Font(name=FONT, size=10, color="5F6B72")
+        for label, val in [("Mentions (7 days)", k["mentions_7d"]),
+                           ("Previous 7 days", k["mentions_prev_7d"]),
+                           ("Share of voice leader", f"{k['leader']} ({k['leader_share_7d']}%)"),
+                           ("Biggest riser", f"{k['riser']} (+{k['riser_change']})"),
+                           ("Brands tracked", k["brands_tracked"])]:
+            ws.cell(row=r, column=1, value=label).font = Font(name=FONT, size=10, color=MUTED)
             ws.cell(row=r, column=2, value=val).font = Font(name=FONT, bold=True, size=10, color=INK)
             r += 1
         r += 2
     ws.column_dimensions["A"].width = 110
-    ws.column_dimensions["B"].width = 16
+    ws.column_dimensions["B"].width = 28
 
     for seg, S in segs.items():
-        write_segment_sheets(wb, seg, S, cfg)
+        write_segment_sheets(wb, seg, S)
 
-    # Coverage log (all)
     ws = wb.create_sheet("Coverage log")
-    title_block(ws, "Coverage log", f"Every tracked item, newest first. Rolling {cfg['history_days']} days. Filter by segment or brand.")
+    title_block(ws, "Coverage log", f"Every tracked item, newest first. Rolling {cfg['history_days']} days. Filter by sector or brand.")
     ws.append([])
-    ws.append(["Date", "Segment", "Brand", "Headline", "Outlet", "Category", "Tone", "Link"])
+    ws.append(["Date", "Sector", "Brand", "Headline", "Outlet", "Category", "Tone", "Link"])
     for i in sorted(items, key=lambda x: x["published"], reverse=True):
         ws.append([parse(i["published"]).astimezone(SAST).strftime("%Y-%m-%d"), i["segment"], i["brand"], i["title"],
                    i["source"], i.get("category", ""), TONE[i.get("sentiment", 0)], i["link"]])
-        ws.cell(row=ws.max_row, column=8).hyperlink = i["link"]
-        ws.cell(row=ws.max_row, column=8).font = Font(name=FONT, size=10, color=ACTION, underline="single")
+        link = ws.cell(row=ws.max_row, column=8)
+        link.hyperlink = i["link"]
+        link.font = Font(name=FONT, size=10, color=ACCENT, underline="single")
     style_table(ws, 4, 8, [12, 10, 18, 70, 22, 28, 10, 40], wrap_cols=("D",))
 
-    # Tone (all)
     ws = wb.create_sheet("Tone")
     title_block(ws, "Headline tone", "Keyword-based tone of headlines, last 30 days. A signal, not a verdict.")
     ws.append([])
-    ws.append(["Segment", "Brand", "Positive", "Neutral", "Negative", "Net score"])
+    ws.append(["Sector", "Brand", "Positive", "Neutral", "Negative", "Net score"])
     for seg, S in segs.items():
         for b in S["metrics"]["brands"]:
             s = S["metrics"]["sentiment_30d"][b]
             tot = sum(s.values()) or 1
             ws.append([seg, b, s["positive"], s["neutral"], s["negative"], round(100 * (s["positive"] - s["negative"]) / tot)])
     style_table(ws, 4, 6, [10, 20, 11, 11, 11, 11], wrap_cols=())
-    for seg, S in segs.items():
-        highlight_home(ws, 4, 6, S["home"], col=2)
 
-    # Top outlets (all)
     ws = wb.create_sheet("Top outlets")
     title_block(ws, "Top outlets", "Publications carrying the most tracked coverage, last 30 days.")
     ws.append([])
-    ws.append(["Segment", "Outlet", "Mentions", "PSG mentions", "Top brand in outlet"])
+    ws.append(["Sector", "Outlet", "Mentions", "Top brand in outlet", "Top brand mentions"])
     for seg, S in segs.items():
         for o in S["metrics"]["top_outlets"]:
-            top = max(o["by_brand"].items(), key=lambda kv: kv[1])[0] if o["by_brand"] else ""
-            ws.append([seg, o["source"], o["mentions"], o["by_brand"].get(S["home"], 0), top])
-    style_table(ws, 4, 5, [10, 28, 11, 14, 22], wrap_cols=())
+            top = max(o["by_brand"].items(), key=lambda kv: kv[1]) if o["by_brand"] else ("", 0)
+            ws.append([seg, o["source"], o["mentions"], top[0], top[1]])
+    style_table(ws, 4, 5, [10, 28, 11, 22, 18], wrap_cols=())
 
-    # Manual inputs
     ws = wb.create_sheet("Social tracker")
     title_block(ws, "Social followers", "Manual input: add rows to data/social.csv (date, brand, platform, followers).")
     ws.append([])
@@ -505,7 +497,7 @@ def build_excel(data: dict, items: list[dict], cfg: dict, path: Path):
     style_table(ws, 4, 5, [18, 14, 13, 22, 12], wrap_cols=())
 
     ws = wb.create_sheet("Campaign log")
-    title_block(ws, "Campaign and activity log", "Manual input: add rows to data/campaigns.csv when the team spots a campaign, sponsorship or event.")
+    title_block(ws, "Campaign and activity log", "Manual input: add rows to data/campaigns.csv when you spot a campaign, sponsorship or event.")
     ws.append([])
     cols = ["date_spotted", "brand", "campaign_or_activity", "channel", "type", "link", "notes"]
     ws.append(["Date spotted", "Brand", "Campaign or activity", "Channel", "Type", "Link", "Notes"])
@@ -516,17 +508,17 @@ def build_excel(data: dict, items: list[dict], cfg: dict, path: Path):
     ws = wb.create_sheet("How it works")
     title_block(ws, "How this tracker works", "Built with Claude Code.")
     notes = [
-        "Two competitor sets: Wealth (PSG Wealth) and Insure (PSG Insure). Share of voice is calculated within each set.",
+        "An independent view of marketing and PR activity in South African financial services. Not affiliated with any brand shown.",
+        "Two sectors: Wealth and Insure. Share of voice is calculated within each sector.",
         "Refreshes automatically every morning at about 05:15 SAST.",
         "Coverage comes from Google News for each brand's search terms in config.json.",
         "Categories and tone are keyword-based. Edit the keyword lists in config.json to tune them.",
-        "The briefing is rule-based. Add an Anthropic API key to have Claude write it.",
         "Social followers and campaigns are manual inputs in the data folder.",
         "Mentions are news items, not reach or advertising value equivalent (AVE).",
     ]
     for n, t in enumerate(notes, start=4):
         ws.cell(row=n, column=1, value="•  " + t).font = BODY_FONT
-    ws.column_dimensions["A"].width = 110
+    ws.column_dimensions["A"].width = 120
 
     path.parent.mkdir(parents=True, exist_ok=True)
     wb.save(path)
@@ -578,11 +570,11 @@ def main() -> int:
     for seg_name, seg in cfg["segments"].items():
         seg_items = [i for i in items if i["segment"] == seg_name]
         brands = [b["name"] for b in seg["brands"]]
-        metrics = build_metrics(seg_items, brands, seg["home"], cfg, now)
-        briefing = (None if demo else claude_briefing(seg_name, metrics, seg_items, seg["home"], cfg, now)) \
-            or rule_based_briefing(metrics, seg_items, seg["home"], now)
+        metrics = build_metrics(seg_items, brands, cfg, now)
+        briefing = (None if demo else claude_briefing(seg_name, metrics, seg_items, cfg, now)) \
+            or rule_based_briefing(seg_name, metrics, seg_items, now)
         recent = sorted(window(seg_items, 30, now), key=lambda i: i["published"], reverse=True)
-        segments[seg_name] = {"home": seg["home"], "briefing": briefing, "metrics": metrics, "coverage": recent[:300]}
+        segments[seg_name] = {"briefing": briefing, "metrics": metrics, "coverage": recent[:300]}
 
     data = {
         "meta": {
@@ -598,7 +590,10 @@ def main() -> int:
     }
     SITE.mkdir(exist_ok=True)
     (SITE / "data.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
-    build_excel(data, items, cfg, SITE / "PSG_Competitor_Tracker.xlsx")
+    old = SITE / "PSG_Competitor_Tracker.xlsx"
+    if old.exists():
+        old.unlink()
+    build_excel(data, items, cfg, SITE / WORKBOOK)
     print(f"Done: {len(items)} items, {len(errors)} fetch errors.")
     return 0
 

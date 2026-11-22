@@ -1,5 +1,5 @@
 {
-  "tracker_name": "PSG Marketing & PR Competitor Tracker",
+  "tracker_name": "Financial Services Marketing Tracker",
   "region": {
     "hl": "en-ZA",
     "gl": "ZA",
@@ -9,9 +9,63 @@
   "history_days": 180,
   "segments": {
     "Wealth": {
-      "home": "PSG Wealth",
       "label": "Wealth",
       "brands": [
+        {
+          "name": "Alexander Forbes",
+          "query": "\"Alexander Forbes\"",
+          "website": "https://www.alexanderforbes.co.za"
+        },
+        {
+          "name": "Allan Gray",
+          "query": "\"Allan Gray\"",
+          "website": "https://www.allangray.co.za"
+        },
+        {
+          "name": "Brenthurst",
+          "query": "\"Brenthurst Wealth\" OR \"Brenthurst\" wealth OR \"Magnus Heystek\"",
+          "website": "https://www.brenthurst.co.za"
+        },
+        {
+          "name": "Citadel",
+          "query": "\"Citadel Wealth\" OR \"Citadel\" Absa wealth",
+          "website": "https://www.citadel.co.za"
+        },
+        {
+          "name": "Coronation",
+          "query": "\"Coronation Fund Managers\" OR \"Coronation Asset Management\"",
+          "website": "https://www.coronation.com"
+        },
+        {
+          "name": "Discovery",
+          "query": "\"Discovery Invest\" OR \"Discovery Limited\" OR \"Discovery Bank\" OR \"Discovery Life\"",
+          "website": "https://www.discovery.co.za"
+        },
+        {
+          "name": "Investec",
+          "query": "\"Investec Wealth\" OR \"Investec Private\" OR \"Investec\" South Africa",
+          "website": "https://www.investec.com"
+        },
+        {
+          "name": "Liberty",
+          "query": "\"Liberty Group\" OR \"Liberty Holdings\" OR \"Liberty Life\" OR \"STANLIB\"",
+          "website": "https://www.liberty.co.za"
+        },
+        {
+          "name": "Momentum",
+          "query": "\"Momentum Group\" OR \"Momentum Investments\" OR \"Momentum Metropolitan\" OR \"Momentum Wealth\"",
+          "website": "https://www.momentum.co.za"
+        },
+        {
+          "name": "Ninety One",
+          "query": "\"Ninety One\" asset manager OR \"Ninety One\" investment",
+          "website": "https://ninetyone.com"
+        },
+        {
+          "name": "Old Mutual",
+          "query": "\"Old Mutual\" -\"Old Mutual Insure\"",
+          "website": "https://www.oldmutual.co.za"
+        },
         {
           "name": "PSG Wealth",
           "query": "\"PSG Wealth\" OR \"PSG Asset Management\" OR \"PSG Financial Services\"",
@@ -23,71 +77,60 @@
           "website": "https://www.sanlam.co.za"
         },
         {
-          "name": "Old Mutual",
-          "query": "\"Old Mutual\" -\"Old Mutual Insure\"",
-          "website": "https://www.oldmutual.co.za"
-        },
-        {
-          "name": "Discovery",
-          "query": "\"Discovery Invest\" OR \"Discovery Limited\" OR \"Discovery Bank\" OR \"Discovery Life\"",
-          "website": "https://www.discovery.co.za"
-        },
-        {
-          "name": "Momentum",
-          "query": "\"Momentum Group\" OR \"Momentum Investments\" OR \"Momentum Metropolitan\" OR \"Momentum Wealth\"",
-          "website": "https://www.momentum.co.za"
-        },
-        {
-          "name": "Liberty",
-          "query": "\"Liberty Group\" OR \"Liberty Holdings\" OR \"Liberty Life\" OR \"STANLIB\"",
-          "website": "https://www.liberty.co.za"
-        },
-        {
-          "name": "Investec",
-          "query": "\"Investec Wealth\" OR \"Investec Private\" OR \"Investec\" South Africa",
-          "website": "https://www.investec.com"
-        },
-        {
-          "name": "Allan Gray",
-          "query": "\"Allan Gray\"",
-          "website": "https://www.allangray.co.za"
-        },
-        {
-          "name": "Coronation",
-          "query": "\"Coronation Fund Managers\" OR \"Coronation Asset Management\"",
-          "website": "https://www.coronation.com"
-        },
-        {
-          "name": "Ninety One",
-          "query": "\"Ninety One\" asset manager OR \"Ninety One\" investment",
-          "website": "https://ninetyone.com"
-        },
-        {
-          "name": "Alexander Forbes",
-          "query": "\"Alexander Forbes\"",
-          "website": "https://www.alexanderforbes.co.za"
-        },
-        {
-          "name": "Citadel",
-          "query": "\"Citadel Wealth\" OR \"Citadel\" Absa wealth",
-          "website": "https://www.citadel.co.za"
-        },
-        {
           "name": "Sygnia",
           "query": "\"Sygnia\"",
           "website": "https://www.sygnia.co.za"
-        },
-        {
-          "name": "Brenthurst",
-          "query": "\"Brenthurst Wealth\" OR \"Brenthurst\" wealth OR \"Magnus Heystek\"",
-          "website": "https://www.brenthurst.co.za"
         }
       ]
     },
     "Insure": {
-      "home": "PSG Insure",
       "label": "Insure",
       "brands": [
+        {
+          "name": "Aon SA",
+          "query": "\"Aon South Africa\" OR \"Aon SA\"",
+          "website": "https://www.aon.com/southafrica"
+        },
+        {
+          "name": "Discovery Insure",
+          "query": "\"Discovery Insure\"",
+          "website": "https://www.discovery.co.za/car-and-home-insurance"
+        },
+        {
+          "name": "Hollard",
+          "query": "\"Hollard\"",
+          "website": "https://www.hollard.co.za"
+        },
+        {
+          "name": "Indwe",
+          "query": "\"Indwe Risk Services\" OR \"Indwe\" insurance",
+          "website": "https://www.indwerisk.co.za"
+        },
+        {
+          "name": "King Price",
+          "query": "\"King Price\" insurance OR \"King Price Insurance\"",
+          "website": "https://www.kingprice.co.za"
+        },
+        {
+          "name": "Marsh SA",
+          "query": "\"Marsh Africa\" OR \"Marsh South Africa\" OR \"Marsh McLennan\" South Africa",
+          "website": "https://www.marsh.com/za"
+        },
+        {
+          "name": "MiWay",
+          "query": "\"MiWay\"",
+          "website": "https://www.miway.co.za"
+        },
+        {
+          "name": "Old Mutual Insure",
+          "query": "\"Old Mutual Insure\"",
+          "website": "https://www.oldmutualinsure.co.za"
+        },
+        {
+          "name": "OUTsurance",
+          "query": "\"OUTsurance\"",
+          "website": "https://www.outsurance.co.za"
+        },
         {
           "name": "PSG Insure",
           "query": "\"PSG Insure\"",
@@ -97,51 +140,6 @@
           "name": "Santam",
           "query": "\"Santam\"",
           "website": "https://www.santam.co.za"
-        },
-        {
-          "name": "OUTsurance",
-          "query": "\"OUTsurance\"",
-          "website": "https://www.outsurance.co.za"
-        },
-        {
-          "name": "Hollard",
-          "query": "\"Hollard\"",
-          "website": "https://www.hollard.co.za"
-        },
-        {
-          "name": "Discovery Insure",
-          "query": "\"Discovery Insure\"",
-          "website": "https://www.discovery.co.za/car-and-home-insurance"
-        },
-        {
-          "name": "Old Mutual Insure",
-          "query": "\"Old Mutual Insure\"",
-          "website": "https://www.oldmutualinsure.co.za"
-        },
-        {
-          "name": "King Price",
-          "query": "\"King Price\" insurance OR \"King Price Insurance\"",
-          "website": "https://www.kingprice.co.za"
-        },
-        {
-          "name": "MiWay",
-          "query": "\"MiWay\"",
-          "website": "https://www.miway.co.za"
-        },
-        {
-          "name": "Indwe",
-          "query": "\"Indwe Risk Services\" OR \"Indwe\" insurance",
-          "website": "https://www.indwerisk.co.za"
-        },
-        {
-          "name": "Aon SA",
-          "query": "\"Aon South Africa\" OR \"Aon SA\"",
-          "website": "https://www.aon.com/southafrica"
-        },
-        {
-          "name": "Marsh SA",
-          "query": "\"Marsh Africa\" OR \"Marsh South Africa\" OR \"Marsh McLennan\" South Africa",
-          "website": "https://www.marsh.com/za"
         }
       ]
     }
