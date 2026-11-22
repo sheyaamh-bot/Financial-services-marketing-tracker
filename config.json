@@ -186,7 +186,10 @@
         {
           "name": "Old Mutual Insure",
           "query": "\"Old Mutual Insure\"",
-          "website": "https://www.oldmutualinsure.co.za"
+          "website": "https://www.oldmutualinsure.co.za",
+          "social": {
+            "instagram": "oldmutualinsure"
+          }
         },
         {
           "name": "OUTsurance",
