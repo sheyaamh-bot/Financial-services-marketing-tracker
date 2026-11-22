@@ -1,6 +1,8 @@
 # Financial Services Marketing Tracker
 
-An independent, daily view of marketing and PR activity across South African financial services. Built with Claude Code.
+An independent, daily view of South African media coverage of financial services marketing and PR. Built with Claude Code.
+
+**South African media only.** An article counts only when its publisher is a South African outlet: any `.za` web address, plus the South African outlets listed under `south_africa_only` in `config.json` that use other addresses (such as News24 and Bizcommunity). Topic searches are also steered to South African stories, so terms like "TFSA" don't fill up with UK or Canadian coverage.
 
 It tracks two sectors:
 
@@ -89,5 +91,6 @@ date,brand,platform,followers,notes
 - Mentions are news items. They are not reach, impressions or advertising value equivalent (AVE).
 - The first live run looks back 30 days. After that, history builds daily, so 90-day views fill up over three months.
 - Brands are linked to a topic only when a headline names them.
+- International coverage of South African brands (for example Reuters or the Financial Times) is left out by design. Add an outlet's address to `outlet_domains` to include it.
 - Categories and tone come from headline keywords. Treat them as signals and tune `config.json` over time.
 - Google News RSS suits monitoring and demonstration. For commercial redistribution, use a licensed media-monitoring feed.

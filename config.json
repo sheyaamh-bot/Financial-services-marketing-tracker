@@ -19,6 +19,26 @@
     "marketscreener",
     "quote and history"
   ],
+  "south_africa_only": {
+    "_note": "Only articles from South African outlets are kept: any .za web address, plus the outlets listed here that use other addresses.",
+    "outlet_domains": [
+      "news24.com",
+      "bizcommunity.com",
+      "dailyinvestor.com",
+      "sabcnews.com",
+      "enca.com",
+      "thesouthafrican.com",
+      "capetownetc.com",
+      "riskafricamagazine.com",
+      "ventureburn.com",
+      "memeburn.com",
+      "jacarandafm.com",
+      "newzroomafrika.com",
+      "africanfinancials.com",
+      "sharenet.co.za"
+    ],
+    "topic_context": "(\"South Africa\" OR \"South African\" OR SARS OR JSE OR rand)"
+  },
   "history_days": 180,
   "segments": {
     "Wealth": {
@@ -372,7 +392,7 @@
     {
       "name": "Retirement",
       "sector": "Wealth",
-      "query": "retirement South Africa OR \"retirement savings\" OR \"retirement annuity\" OR \"living annuity\"",
+      "query": "\"retirement savings\" OR \"retirement annuity\" OR \"living annuity\" OR \"retirement fund\" OR retirement",
       "keywords": [
         "retirement",
         "retire",
@@ -383,7 +403,7 @@
     {
       "name": "Tax-free savings",
       "sector": "Wealth",
-      "query": "\"tax-free savings\" OR \"tax free savings\" OR TFSA",
+      "query": "\"tax-free savings\" OR \"tax free savings\" OR \"tax-free investment\" OR TFSA",
       "keywords": [
         "tax-free savings",
         "tax free savings",
@@ -393,7 +413,7 @@
     {
       "name": "Two-pot retirement",
       "sector": "Wealth",
-      "query": "\"two-pot\" retirement OR \"two pot\" retirement",
+      "query": "\"two-pot\" OR \"two pot\" retirement",
       "keywords": [
         "two-pot",
         "two pot"
@@ -402,7 +422,7 @@
     {
       "name": "Offshore investing",
       "sector": "Wealth",
-      "query": "\"offshore investing\" OR \"offshore investment\" OR \"offshore allowance\" South Africa",
+      "query": "\"offshore investing\" OR \"offshore investment\" OR \"offshore allowance\" OR \"invest offshore\"",
       "keywords": [
         "offshore"
       ]
@@ -410,7 +430,7 @@
     {
       "name": "Estate planning",
       "sector": "Wealth",
-      "query": "\"estate planning\" OR \"living will\" OR \"deceased estate\" South Africa",
+      "query": "\"estate planning\" OR \"deceased estate\" OR \"living will\" OR inheritance",
       "keywords": [
         "estate planning",
         "deceased estate",
@@ -421,7 +441,7 @@
     {
       "name": "Financial advice",
       "sector": "Wealth",
-      "query": "\"financial adviser\" OR \"financial advisor\" OR \"financial planner\" OR \"financial advice\" South Africa",
+      "query": "\"financial adviser\" OR \"financial advisor\" OR \"financial planner\" OR \"financial advice\"",
       "keywords": [
         "financial advice",
         "financial adviser",
@@ -432,7 +452,7 @@
     {
       "name": "Fire risk",
       "sector": "Insure",
-      "query": "\"fire risk\" OR \"fire damage\" OR \"fire claims\" OR \"veld fire\" insurance",
+      "query": "\"fire risk\" OR \"fire damage\" OR \"fire claims\" OR \"veld fire\" OR \"fire insurance\"",
       "keywords": [
         "fire"
       ]
@@ -440,7 +460,7 @@
     {
       "name": "Commercial insurance",
       "sector": "Insure",
-      "query": "\"commercial insurance\" OR \"business insurance\" OR \"commercial lines\" South Africa",
+      "query": "\"commercial insurance\" OR \"business insurance\" OR \"commercial lines\"",
       "keywords": [
         "commercial insurance",
         "business insurance",
@@ -451,7 +471,7 @@
     {
       "name": "Car insurance",
       "sector": "Insure",
-      "query": "\"car insurance\" OR \"motor insurance\" OR \"vehicle insurance\" South Africa",
+      "query": "\"car insurance\" OR \"motor insurance\" OR \"vehicle insurance\"",
       "keywords": [
         "car insurance",
         "motor insurance",
@@ -464,7 +484,7 @@
     {
       "name": "Home insurance",
       "sector": "Insure",
-      "query": "\"home insurance\" OR \"household insurance\" OR \"homeowners insurance\" South Africa",
+      "query": "\"home insurance\" OR \"household insurance\" OR \"homeowners insurance\" OR \"building insurance\"",
       "keywords": [
         "home insurance",
         "household insurance",
@@ -475,7 +495,7 @@
     {
       "name": "Climate and flood risk",
       "sector": "Insure",
-      "query": "flood insurance OR \"climate risk\" OR \"storm damage\" South Africa",
+      "query": "\"flood insurance\" OR \"flood damage\" OR \"climate risk\" OR \"storm damage\"",
       "keywords": [
         "flood",
         "climate",
@@ -487,7 +507,7 @@
     {
       "name": "Cyber insurance",
       "sector": "Insure",
-      "query": "\"cyber insurance\" OR \"cyber risk\" OR \"cyber attack\" insurance South Africa",
+      "query": "\"cyber insurance\" OR \"cyber risk\" OR \"cyber attack\"",
       "keywords": [
         "cyber"
       ]

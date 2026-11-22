@@ -37,6 +37,7 @@ import xml.etree.ElementTree as ET
 from collections import Counter, defaultdict
 from datetime import datetime, timedelta, timezone
 from email.utils import parsedate_to_datetime
+from urllib.parse import urlparse
 from pathlib import Path
 
 import requests
@@ -97,17 +98,31 @@ def fetch_google_news(brand: dict, cfg: dict, lookback_days: int) -> list[dict]:
         link = (node.findtext("link") or "").strip()
         source_el = node.find("source")
         source = (source_el.text or "").strip() if source_el is not None else ""
+        source_url = (source_el.get("url") or "").strip() if source_el is not None else ""
         if source and title.endswith(f" - {source}"):  # Google appends " - Source"
             title = title[: -len(source) - 3].strip()
         try:
             published = parsedate_to_datetime(node.findtext("pubDate")).astimezone(timezone.utc)
         except Exception:
             published = datetime.now(timezone.utc)
-        if excluded(title, cfg):
+        if excluded(title, cfg) or not south_african(source_url, cfg):
             continue
-        items.append({"brand": brand["name"], "title": title, "link": link,
-                      "source": source or "Unknown", "published": published.isoformat()})
+        items.append({"brand": brand["name"], "title": title, "link": link, "source": source or "Unknown",
+                      "source_url": source_url, "published": published.isoformat()})
     return items
+
+
+def south_african(source_url: str, cfg: dict) -> bool:
+    """True when the publisher is South African: a .za address or a listed SA outlet."""
+    rule = cfg.get("south_africa_only")
+    if not rule:
+        return True
+    domain = urlparse(source_url).netloc.lower().split(":")[0]
+    if domain.startswith("www."):
+        domain = domain[4:]
+    if not domain:
+        return False
+    return domain.endswith(".za") or any(domain == d or domain.endswith("." + d) for d in rule.get("outlet_domains", []))
 
 
 def excluded(title: str, cfg: dict) -> bool:
@@ -138,7 +153,7 @@ def demo_items(cfg: dict) -> list[dict]:
     rnd = random.Random(42)
     now = datetime.now(timezone.utc)
     outlets = ["Moneyweb", "BusinessLIVE", "Daily Maverick", "News24", "IOL", "Bizcommunity",
-               "MyBroadband", "Citizen", "Personal Finance", "Fin24", "Cover", "FA News", "Insurance Times"]
+               "MyBroadband", "Citizen", "Personal Finance", "Fin24", "Cover", "FA News", "BusinessTech"]
     cats = list(cfg["categories"].keys()) + ["Other coverage"]
     out = []
     for seg_name, seg in cfg["segments"].items():
@@ -167,7 +182,7 @@ def demo_topic_items(cfg: dict) -> list[dict]:
     rnd = random.Random(7)
     now = datetime.now(timezone.utc)
     outlets = ["Moneyweb", "BusinessLIVE", "Daily Maverick", "News24", "IOL", "Personal Finance",
-               "Citizen", "Fin24", "FA News", "Insurance Times", "Cover", "MyBroadband"]
+               "Citizen", "Fin24", "FA News", "BusinessTech", "Cover", "MyBroadband"]
     out = []
     for t in cfg.get("topics", []):
         brands = [b["name"] for b in cfg["segments"][t["sector"]]["brands"]]
@@ -667,6 +682,7 @@ def build_excel(data: dict, items: list[dict], cfg: dict, path: Path):
         "Two sectors: Wealth and Insure. Share of voice is calculated within each sector.",
         "Refreshes automatically every morning at about 05:15 SAST.",
         "Coverage comes from Google News for each brand's search terms in config.json.",
+        "South African media only: articles count only when the publisher is a South African outlet.",
         "Categories and tone are keyword-based. Edit the keyword lists in config.json to tune them.",
         "Topics are collected each morning as their own news searches. Brands are linked to a topic when a headline names them.",
         "The online dashboard also builds competitor reports (PDF or Excel) and searches all coverage.",
@@ -700,7 +716,8 @@ def main() -> int:
     else:
         # A live run replaces any sample data.
         known = {} if history.get("demo") else {i["id"]: i for i in history["items"]
-                                                  if "segment" in i and not excluded(i["title"], cfg)}
+                                                  if "segment" in i and not excluded(i["title"], cfg)
+                                                  and south_african(i.get("source_url", ""), cfg)}
         have = {(i["segment"], i["brand"]) for i in known.values()}
         for seg_name, seg in cfg["segments"].items():
             for brand in seg["brands"]:
@@ -723,12 +740,15 @@ def main() -> int:
         items = [i for i in known.values() if parse(i["published"]) >= cutoff]
 
         known_t = {} if history.get("demo") else {i["id"]: i for i in history.get("topic_items", [])
-                                                    if not excluded(i["title"], cfg)}
+                                                    if not excluded(i["title"], cfg)
+                                                    and south_african(i.get("source_url", ""), cfg)}
         have_t = {i["topic"] for i in known_t.values()}
         for topic in cfg.get("topics", []):
             t_lookback = cfg["lookback_days_per_run"] if topic["name"] in have_t else cfg.get("backfill_days", 30)
             try:
-                for it in fetch_google_news({"name": topic["name"], "query": topic["query"]}, cfg, t_lookback):
+                context = (cfg.get("south_africa_only") or {}).get("topic_context", "")
+                query = f"({topic['query']}) {context}".strip()
+                for it in fetch_google_news({"name": topic["name"], "query": query}, cfg, t_lookback):
                     it["topic"] = it.pop("brand")
                     it["id"] = item_id(topic["name"], it["link"], it["title"])
                     known_t.setdefault(it["id"], it)
