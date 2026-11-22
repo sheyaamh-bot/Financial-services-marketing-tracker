@@ -119,7 +119,8 @@ DROPPED_OUTLETS: Counter = Counter()  # non-SA publishers skipped this run, to h
 
 
 def south_african(source_url: str, cfg: dict) -> bool:
-    """True when the publisher is South African: a .za address or a listed SA outlet."""
+    """True when the publisher is South African (a .za address or a listed SA outlet),
+    or one of the international outlets the tracker also follows (for example Reuters and the FT)."""
     rule = cfg.get("south_africa_only")
     if not rule:
         return True
@@ -128,7 +129,8 @@ def south_african(source_url: str, cfg: dict) -> bool:
         domain = domain[4:]
     if not domain:
         return False
-    return domain.endswith(".za") or any(domain == d or domain.endswith("." + d) for d in rule.get("outlet_domains", []))
+    allowed = rule.get("outlet_domains", []) + rule.get("international_outlets", [])
+    return domain.endswith(".za") or any(domain == d or domain.endswith("." + d) for d in allowed)
 
 
 def excluded(title: str, cfg: dict) -> bool:
@@ -688,7 +690,7 @@ def build_excel(data: dict, items: list[dict], cfg: dict, path: Path):
         "Two sectors: Wealth and Insure. Share of voice is calculated within each sector.",
         "Refreshes automatically every morning at about 05:15 SAST.",
         "Coverage comes from Google News for each brand's search terms in config.json.",
-        "South African media only: articles count only when the publisher is a South African outlet.",
+        "South African media plus Reuters and the Financial Times: other publishers are left out.",
         "Categories and tone are keyword-based. Edit the keyword lists in config.json to tune them.",
         "Topics are collected each morning as their own news searches. Brands are linked to a topic when a headline names them.",
         "The online dashboard also builds competitor reports (PDF or Excel) and searches all coverage.",
@@ -724,7 +726,8 @@ def main() -> int:
         known = {} if history.get("demo") else {i["id"]: i for i in history["items"]
                                                   if "segment" in i and not excluded(i["title"], cfg)
                                                   and south_african(i.get("source_url", ""), cfg)}
-        have = {(i["segment"], i["brand"]) for i in known.values()}
+        force_backfill = os.environ.get("TRACKER_BACKFILL", "").lower() in ("1", "true", "yes")
+        have = set() if force_backfill else {(i["segment"], i["brand"]) for i in known.values()}
         for seg_name, seg in cfg["segments"].items():
             for brand in seg["brands"]:
                 # A brand (or topic) with no history yet looks further back, so new
@@ -748,7 +751,7 @@ def main() -> int:
         known_t = {} if history.get("demo") else {i["id"]: i for i in history.get("topic_items", [])
                                                     if not excluded(i["title"], cfg)
                                                     and south_african(i.get("source_url", ""), cfg)}
-        have_t = {i["topic"] for i in known_t.values()}
+        have_t = set() if force_backfill else {i["topic"] for i in known_t.values()}
         for topic in cfg.get("topics", []):
             t_lookback = cfg["lookback_days_per_run"] if topic["name"] in have_t else cfg.get("backfill_days", 30)
             try:

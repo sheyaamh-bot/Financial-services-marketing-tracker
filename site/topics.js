@@ -39,7 +39,7 @@ window.Topics = (() => {
       <section class="card" style="margin-bottom:16px" aria-label="Search coverage">
         <div class="row-head">
           <div><h2>Search all coverage</h2>
-          <p class="sub" style="margin:0">Searches every South African headline collected in the last 90 days, for tracked brands and topics. Separate words with commas to find any of them.</p></div>
+          <p class="sub" style="margin:0">Searches every headline collected (South African media, Reuters and the FT) in the last 90 days, for tracked brands and topics. Separate words with commas to find any of them.</p></div>
           <div class="seg" role="group" aria-label="Period">
             ${[7, 30, 90].map(d => `<button type="button" data-tdays="${d}" aria-pressed="${d === st.days}">${d} days</button>`).join("")}
           </div>

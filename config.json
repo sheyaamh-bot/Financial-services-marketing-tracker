@@ -20,7 +20,7 @@
     "quote and history"
   ],
   "south_africa_only": {
-    "_note": "Only articles from South African outlets are kept: any .za web address, plus the outlets listed here that use other addresses.",
+    "_note": "Articles count when the publisher is South African (any .za address or an outlet in outlet_domains), or one of the international outlets listed in international_outlets.",
     "outlet_domains": [
       "news24.com",
       "bizcommunity.com",
@@ -37,7 +37,11 @@
       "africanfinancials.com",
       "sharenet.co.za"
     ],
-    "topic_context": "(\"South Africa\" OR \"South African\" OR SARS OR JSE OR rand)"
+    "topic_context": "(\"South Africa\" OR \"South African\" OR SARS OR JSE OR rand)",
+    "international_outlets": [
+      "reuters.com",
+      "ft.com"
+    ]
   },
   "history_days": 180,
   "segments": {
