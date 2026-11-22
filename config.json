@@ -1,0 +1,360 @@
+{
+  "tracker_name": "PSG Marketing & PR Competitor Tracker",
+  "region": {
+    "hl": "en-ZA",
+    "gl": "ZA",
+    "ceid": "ZA:en"
+  },
+  "lookback_days_per_run": 3,
+  "history_days": 180,
+  "segments": {
+    "Wealth": {
+      "home": "PSG Wealth",
+      "label": "Wealth",
+      "brands": [
+        {
+          "name": "PSG Wealth",
+          "query": "\"PSG Wealth\" OR \"PSG Asset Management\" OR \"PSG Financial Services\"",
+          "website": "https://www.psg.co.za"
+        },
+        {
+          "name": "Sanlam",
+          "query": "\"Sanlam\" OR \"Glacier by Sanlam\" -Santam",
+          "website": "https://www.sanlam.co.za"
+        },
+        {
+          "name": "Old Mutual",
+          "query": "\"Old Mutual\" -\"Old Mutual Insure\"",
+          "website": "https://www.oldmutual.co.za"
+        },
+        {
+          "name": "Discovery",
+          "query": "\"Discovery Invest\" OR \"Discovery Limited\" OR \"Discovery Bank\" OR \"Discovery Life\"",
+          "website": "https://www.discovery.co.za"
+        },
+        {
+          "name": "Momentum",
+          "query": "\"Momentum Group\" OR \"Momentum Investments\" OR \"Momentum Metropolitan\" OR \"Momentum Wealth\"",
+          "website": "https://www.momentum.co.za"
+        },
+        {
+          "name": "Liberty",
+          "query": "\"Liberty Group\" OR \"Liberty Holdings\" OR \"Liberty Life\" OR \"STANLIB\"",
+          "website": "https://www.liberty.co.za"
+        },
+        {
+          "name": "Investec",
+          "query": "\"Investec Wealth\" OR \"Investec Private\" OR \"Investec\" South Africa",
+          "website": "https://www.investec.com"
+        },
+        {
+          "name": "Allan Gray",
+          "query": "\"Allan Gray\"",
+          "website": "https://www.allangray.co.za"
+        },
+        {
+          "name": "Coronation",
+          "query": "\"Coronation Fund Managers\" OR \"Coronation Asset Management\"",
+          "website": "https://www.coronation.com"
+        },
+        {
+          "name": "Ninety One",
+          "query": "\"Ninety One\" asset manager OR \"Ninety One\" investment",
+          "website": "https://ninetyone.com"
+        },
+        {
+          "name": "Alexander Forbes",
+          "query": "\"Alexander Forbes\"",
+          "website": "https://www.alexanderforbes.co.za"
+        },
+        {
+          "name": "Citadel",
+          "query": "\"Citadel Wealth\" OR \"Citadel\" Absa wealth",
+          "website": "https://www.citadel.co.za"
+        },
+        {
+          "name": "Sygnia",
+          "query": "\"Sygnia\"",
+          "website": "https://www.sygnia.co.za"
+        },
+        {
+          "name": "Brenthurst",
+          "query": "\"Brenthurst Wealth\" OR \"Brenthurst\" wealth OR \"Magnus Heystek\"",
+          "website": "https://www.brenthurst.co.za"
+        }
+      ]
+    },
+    "Insure": {
+      "home": "PSG Insure",
+      "label": "Insure",
+      "brands": [
+        {
+          "name": "PSG Insure",
+          "query": "\"PSG Insure\"",
+          "website": "https://www.psg.co.za/insure"
+        },
+        {
+          "name": "Santam",
+          "query": "\"Santam\"",
+          "website": "https://www.santam.co.za"
+        },
+        {
+          "name": "OUTsurance",
+          "query": "\"OUTsurance\"",
+          "website": "https://www.outsurance.co.za"
+        },
+        {
+          "name": "Hollard",
+          "query": "\"Hollard\"",
+          "website": "https://www.hollard.co.za"
+        },
+        {
+          "name": "Discovery Insure",
+          "query": "\"Discovery Insure\"",
+          "website": "https://www.discovery.co.za/car-and-home-insurance"
+        },
+        {
+          "name": "Old Mutual Insure",
+          "query": "\"Old Mutual Insure\"",
+          "website": "https://www.oldmutualinsure.co.za"
+        },
+        {
+          "name": "King Price",
+          "query": "\"King Price\" insurance OR \"King Price Insurance\"",
+          "website": "https://www.kingprice.co.za"
+        },
+        {
+          "name": "MiWay",
+          "query": "\"MiWay\"",
+          "website": "https://www.miway.co.za"
+        },
+        {
+          "name": "Indwe",
+          "query": "\"Indwe Risk Services\" OR \"Indwe\" insurance",
+          "website": "https://www.indwerisk.co.za"
+        },
+        {
+          "name": "Aon SA",
+          "query": "\"Aon South Africa\" OR \"Aon SA\"",
+          "website": "https://www.aon.com/southafrica"
+        },
+        {
+          "name": "Marsh SA",
+          "query": "\"Marsh Africa\" OR \"Marsh South Africa\" OR \"Marsh McLennan\" South Africa",
+          "website": "https://www.marsh.com/za"
+        }
+      ]
+    }
+  },
+  "categories": {
+    "Campaign & advertising": [
+      "campaign",
+      "advert",
+      "advertising",
+      "tvc",
+      "billboard",
+      "brand refresh",
+      "rebrand",
+      "new look",
+      "tagline",
+      "creative agency",
+      "media agency",
+      "ad ",
+      "commercial"
+    ],
+    "Sponsorship & events": [
+      "sponsor",
+      "sponsorship",
+      "partnership with",
+      "title partner",
+      "event",
+      "summit",
+      "conference",
+      "webinar",
+      "roadshow",
+      "marathon",
+      "cricket",
+      "rugby",
+      "golf",
+      "festival"
+    ],
+    "Awards & recognition": [
+      "award",
+      "awards",
+      "winner",
+      "wins",
+      "ranked",
+      "ranking",
+      "raging bull",
+      "top employer",
+      "recognised",
+      "recognized"
+    ],
+    "Leadership & appointments": [
+      "appoint",
+      "appointment",
+      "appoints",
+      "ceo",
+      "chief",
+      "head of",
+      "joins",
+      "resigns",
+      "steps down",
+      "successor",
+      "new md"
+    ],
+    "Product & launches": [
+      "launch",
+      "launches",
+      "introduces",
+      "unveils",
+      "new fund",
+      "new product",
+      "app",
+      "platform",
+      "offering",
+      "rollout",
+      "cover",
+      "policy",
+      "premium"
+    ],
+    "Results & financials": [
+      "results",
+      "earnings",
+      "profit",
+      "headline earnings",
+      "dividend",
+      "aum",
+      "assets under",
+      "revenue",
+      "trading statement",
+      "interim",
+      "annual"
+    ],
+    "CSR & community": [
+      "csr",
+      "foundation",
+      "bursary",
+      "donat",
+      "community",
+      "financial literacy",
+      "education",
+      "sustainab",
+      "esg",
+      "volunteer"
+    ],
+    "Thought leadership & commentary": [
+      "says",
+      "warns",
+      "outlook",
+      "opinion",
+      "column",
+      "insight",
+      "budget",
+      "interest rate",
+      "repo rate",
+      "two-pot",
+      "retirement",
+      "inflation",
+      "market view",
+      "podcast",
+      "hijack",
+      "load shedding",
+      "flood",
+      "storm",
+      "crime",
+      "tips"
+    ],
+    "Digital & social": [
+      "linkedin",
+      "instagram",
+      "tiktok",
+      "youtube",
+      "social media",
+      "digital",
+      "influencer",
+      "website",
+      "chatbot",
+      " ai "
+    ],
+    "Partnerships & deals": [
+      "acquire",
+      "acquisition",
+      "merger",
+      "stake",
+      "deal",
+      "joint venture",
+      "partners with",
+      "partnership"
+    ],
+    "Reputation & regulatory": [
+      "fsca",
+      "fine",
+      "penalty",
+      "complaint",
+      "ombud",
+      "lawsuit",
+      "court",
+      "probe",
+      "investigation",
+      "scam",
+      "fraud",
+      "outage",
+      "data breach",
+      "claim rejected",
+      "repudiat",
+      "claims dispute"
+    ]
+  },
+  "sentiment": {
+    "positive": [
+      "award",
+      "wins",
+      "growth",
+      "record",
+      "launch",
+      "strong",
+      "boost",
+      "top",
+      "best",
+      "leading",
+      "rises",
+      "up ",
+      "gain",
+      "celebrat",
+      "innovat",
+      "partner",
+      "success",
+      "expands"
+    ],
+    "negative": [
+      "fine",
+      "penalty",
+      "lawsuit",
+      "court",
+      "probe",
+      "investigation",
+      "scam",
+      "fraud",
+      "outage",
+      "breach",
+      "loss",
+      "falls",
+      "drop",
+      "decline",
+      "warns",
+      "cuts",
+      "job cuts",
+      "retrench",
+      "complaint",
+      "concern",
+      "slump",
+      "down "
+    ]
+  },
+  "claude": {
+    "enabled_if_key_present": true,
+    "model": "claude-opus-5-5",
+    "effort": "low"
+  }
+}
