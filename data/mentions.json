@@ -3549,6 +3549,32 @@
    "first_seen": "2026-11-22T05:18:07.344180+00:00",
    "category": "Other coverage",
    "sentiment": 1
+  },
+  {
+   "brand": "Ninety One",
+   "title": "Money flooding out of South African bonds as United States interest rate hike looms",
+   "link": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxOYzBtT2dSOFJwRUdXVmlXaG43SkhLS3RnUzZKNGNBcUJMQlJ5ZDlhOTJGaHdjUWVzLW1VS2EyeFFwUVlyV2FLVGpObDROaXVwOFNEcFFWRlhOU0ZrQlZueTZ6ZWNvQUdOTUZiM1VPaHNPWE1Qb20xRDdsSmc2dGZpMjhZNTVaYmpPZTV3TGhVUmwwTDJ4VWxYUUREaVVqVHVzMlp3MkhHVktIR19lV0gxSHRRRGFPQ3Fhei1FYWpaaFBpbHM?oc=5",
+   "source": "Daily Investor",
+   "source_url": "https://dailyinvestor.com",
+   "published": "2026-11-21T15:00:00+00:00",
+   "segment": "Wealth",
+   "id": "184e9c1e12c4f13f",
+   "first_seen": "2026-11-22T05:24:44.624868+00:00",
+   "category": "Thought leadership & commentary",
+   "sentiment": 0
+  },
+  {
+   "brand": "Discovery Insure",
+   "title": "Procurement fraud and supplier collusion emerge as most overlooked business risks",
+   "link": "https://news.google.com/rss/articles/CBMixgFBVV95cUxNSTNPakk4eGxCY2pFaEJpU0pmSUFyRVNUVjJ4QTVNUHpkczVSZ3QzRjZPQ3hQOFBDRFhVRlNZQllIRjhrY29rNkVnX2F0YXJsMjh3amVBeUVadnM1MUhROTU3WlZIZmVxaUR6aUJwZWZKWFRfX0NnZjlXU0JYU0VuWVlnQlRJaThURl9faGNfNmRiS0JqLUVJejdvdmNRTzNfaVYxdWtZbUoyeFdKQlRfNUJRa1Y3MXNhR3U3Y0RESmhwbnJNbUE?oc=5",
+   "source": "Insurance Biz",
+   "source_url": "https://insurancebiz.co.za",
+   "published": "2026-11-20T22:37:06+00:00",
+   "segment": "Insure",
+   "id": "230fd1ebf8ea9790",
+   "first_seen": "2026-11-22T05:24:44.624868+00:00",
+   "category": "Reputation & regulatory",
+   "sentiment": -1
   }
  ],
  "topic_items": [
@@ -4640,6 +4666,402 @@
    "published": "2026-07-14T14:06:56+00:00",
    "topic": "Commercial insurance",
    "id": "76ddd62afda16395"
+  },
+  {
+   "title": "Is my TFSA and RA portfolio positioned correctly for long-term growth?",
+   "link": "https://news.google.com/rss/articles/CBMiogFBVV95cUxNY19HSGFpcXE4ZE5Ea1ZWTXdlUlFaZmpDNmxkdDlod2JjOEw2dERPRlVIamhlOG5iQUc5a202Nlhobk1RUG5VdG9pZ211R1ZYUmtvN2h5cXpNYXRUNGxPY3pPemIxM1Y2bm1XY0k1ZEcyQ01Vdm5MaDFDWUZOS1kwSUVkd3J2WndrMXdKWHpjZ3lPYjRac254NE52a0FkRDRKVlE?oc=5",
+   "source": "Moneyweb",
+   "source_url": "https://www.moneyweb.co.za",
+   "published": "2026-10-20T07:00:00+00:00",
+   "topic": "Tax-free savings",
+   "id": "c2b200c54babc99c"
+  },
+  {
+   "title": "Understanding your Tax-Free Savings Account and the recent changes",
+   "link": "https://news.google.com/rss/articles/CBMi2gFBVV95cUxNSUx1R0duOGd3RmFQQ25CcjVMbjRtWWNaN3ZGVTcxY0JZRnFJaGRVbjh6VU5HVzAxNmdtM0toLWEtMVNNM21ZMzV2a2Myb0NEUURqcTJWTmRQeWEtN2xWdWF1RXdfODRVTnZoYVJucFBtVDhQVzBWY3VWSFVZYUlTcUFyVGw5RThtZ0lqNEtlMTNRYzU3UENwbUJ3bG5hQ3RleWFOQ3RwODRrbFlOcTMwb1RzcDFudmkxX25XbTIxNUtydE5VRm9MN3lWcThaRHAyQXA4d3l0WFh6Zw?oc=5",
+   "source": "Simeka Consultants and Actuaries",
+   "source_url": "https://www.simekaconsult.co.za",
+   "published": "2026-08-05T16:47:37+00:00",
+   "topic": "Tax-free savings",
+   "id": "8e8167e2551cc693"
+  },
+  {
+   "title": "Are you making these three costly TFSA mistakes?",
+   "link": "https://news.google.com/rss/articles/CBMioAFBVV95cUxNWmpqS2tsYl8yckU5bk1MNVpCMFFUSDR2NTc5azI1T2laVnhzM2szVHFhWmNUZFhOWUFSMHRxUzItZnE2Ujd5dXpsSDNCNEw3eVhia015X1Z0S19WR3FwZE9Fb2xPbzVVczE4RkwtSUdVMWR5WVhSQ2ZCcWJnbUctdXpiUklsUDN0OW5NR0NUc3c1S2Q1WHZ1M2NRT2hkODNu?oc=5",
+   "source": "Moneyweb",
+   "source_url": "https://www.moneyweb.co.za",
+   "published": "2026-10-19T07:00:00+00:00",
+   "topic": "Tax-free savings",
+   "id": "be5dae93394868b9"
+  },
+  {
+   "title": "Money questions? Answered | How to start a tax-free savings account",
+   "link": "https://news.google.com/rss/articles/CBMivwFBVV95cUxQaUx3V3R5cjd2Q25Ub0lSUnVYR29qaEJVeDN5OXVDYUJzY1ZZeGdCTEFmeFc3WkdmUDk5RlFDZlpkclBjN0F6RkJTWjUwWEZOdWhYMF94OThyd1lEcUptRDhseUE4SmZXU05RYUJlTE5ueHk2WGhVUGxhRTlKc0liZzloSzZRTE1Bd1VZZWFieEhMWVduaFJmZHZxbjNvbjFGNkdpTnY0elB0djlhSG0xOENYZzJKV0ctd3BxbGN0VQ?oc=5",
+   "source": "News24",
+   "source_url": "https://www.news24.com",
+   "published": "2026-06-20T07:00:00+00:00",
+   "topic": "Tax-free savings",
+   "id": "bbc15da7e841ae9a"
+  },
+  {
+   "title": "Tax Free Investment South Africa | Save & Invest",
+   "link": "https://news.google.com/rss/articles/CBMickFVX3lxTE9DdEJGbUlxaFNlMV9panhvZ3VaX05kaThXTWI1UHN6RFN1YUJIZTFPeFk0eHJ1TGQwX216bEYtaVU4X0xNOXR3SldPcDB1NHUwc0RPV29iT0thSjdubUoxeGw2ZU9oT1cwdEQ0UDhEZlBWQQ?oc=5",
+   "source": "glu Mutual",
+   "source_url": "https://glumutual.co.za",
+   "published": "2026-08-02T15:39:47+00:00",
+   "topic": "Tax-free savings",
+   "id": "94e8d7206972a427"
+  },
+  {
+   "title": "Fire Risk Assessments for Industrial Sites | FRS",
+   "link": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE1vVWtLclV2VEdiN2xlMzFoUUpPeEVndm1YT0NoQ3lxd21wSXVnRE9aSW8xdTI0MUJQUDhwN1NRZDRoTUM1UEpoZ3lBM0F4WnpZSGpkb1FaX0o3RUpwSmlPbA?oc=5",
+   "source": "Fire Risk Systems",
+   "source_url": "https://frssa.co.za",
+   "published": "2026-11-12T09:09:58+00:00",
+   "topic": "Fire risk",
+   "id": "4fdfa8c8c3f3110d"
+  },
+  {
+   "title": "Fire Risk Assessment Compliance & safety",
+   "link": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE5KQ19LaXVBOUdKVG9LcXo5eXJ2dzlNdnFON2FKMDUycS0ycGFsTkxrTWpKanVKcnVORmNHemcxOGZKdGUyaEpVSFJEdFNPU21YS04xTnZ2SWFDUkl0SURPZUVsWjVKZ1E?oc=5",
+   "source": "fireandsecuritysa.co.za",
+   "source_url": "https://fireandsecuritysa.co.za",
+   "published": "2026-08-12T13:41:35+00:00",
+   "topic": "Fire risk",
+   "id": "bbd73491424676dc"
+  },
+  {
+   "title": "Fire warden and marshal training: duties and UK compliance",
+   "link": "https://news.google.com/rss/articles/CBMiogFBVV95cUxOU1Y3UGdoQk9PbEduS2hWSlFqbnlyRXNaNzk0cmhFb2pYdXZJOTBibDk2MkYtOFh0SzRreWt2ZjdLVko3VlM4ZGRzNFZYVk5TSmhPMWtpdVVMaUk5SDdpS1FZNnVGMjB4ejRxVi0zMXRWVzRLNVl1U3VFaHZPMUZHT2UwTkZOZXJ2MWxDWTBFTURuV2NzWDVnMmxncEg2aWw5RXc?oc=5",
+   "source": "Driving Sense",
+   "source_url": "https://www.drivingsense.co.za",
+   "published": "2026-10-31T07:00:00+00:00",
+   "topic": "Fire risk",
+   "id": "fb33bea75ad08bc9"
+  },
+  {
+   "title": "FIRE PROTECTION",
+   "link": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPMUVmb1lGZUQ5TUhielJFaXlpOVd0aU51S3pFYl95U1FDb29YajlNS0JqR0xqbVZtdWloRl9MNDdfNngzWlROWS1fcXh5OXRteGVUd0VwSF9GSE5TQm5NR01OZE1lVUtjVC10X2J4STNmT3hVeGxTa0xxYnFaWXBwbUt1OWdwSTlGUmRFWDdRNEcxWEo5dVE?oc=5",
+   "source": "Fire Risk Systems",
+   "source_url": "https://frssa.co.za",
+   "published": "2026-11-12T11:21:39+00:00",
+   "topic": "Fire risk",
+   "id": "14fca45e79064912"
+  },
+  {
+   "title": "Tokio Marine & Nichido Fire Insurance Updates",
+   "link": "https://news.google.com/rss/articles/CBMigAFBVV95cUxPR1JPdHRUcmVJbTU2LV9zOWdqdEdrZFlEQ0lHUnJveHY2dGFoRjFJcWhMclNjcFE0c1dIUTlUTmktN21Xc2I1dG5LcGdwdkxwejdtb0g3Y3hqV004VzRTLWctd1hYVEt4N1kzaHhFX1JiQ0lLNGh6bUtrUndrQ09Feg?oc=5",
+   "source": "Engineering News",
+   "source_url": "https://www.engineeringnews.co.za",
+   "published": "2026-11-11T09:02:03+00:00",
+   "topic": "Fire risk",
+   "id": "c3c86407ca7ad77a"
+  },
+  {
+   "title": "Germiston shack fire claims four lives",
+   "link": "https://news.google.com/rss/articles/CBMifkFVX3lxTE0xMmdraUdOTXhnM1VlbnVkMnAzYTFfb1ZJdjhDYnQ0TDZlNm9ENEgzaVhIeEo2Y3h3UVhXa0hxbFpNdlhjZGhOMmJ2LWZQV2lPX2VZR1lyNEJZUVBleTB1WEtSelJGQmNvT1JVVE43MmFYcG9uemtyTnc1UUh1UQ?oc=5",
+   "source": "SABC News",
+   "source_url": "https://www.sabcnews.com",
+   "published": "2026-10-09T07:00:00+00:00",
+   "topic": "Fire risk",
+   "id": "06351506a4da8bbf"
+  },
+  {
+   "title": "Same-Day Farm and Veld Fire Signs",
+   "link": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE56ZTBheVp6WXN5MGcxQzlkdjFCVzhod2haWU9SOElmVWJ5QnRMRjY0MXFyV3MxNGRnYXlmSkpnUkNfV1NUaXo4cDAyZjZVVUtpUHZaUXlNX1VXQjgteUZuZUl2dw?oc=5",
+   "source": "samedayprint.co.za",
+   "source_url": "https://samedayprint.co.za",
+   "published": "2026-11-08T04:18:03+00:00",
+   "topic": "Fire risk",
+   "id": "a2876af3671c8c38"
+  },
+  {
+   "title": "Sigfox 0G network powers SA's first nationwide proactive fire-risk ecosystem",
+   "link": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxPUWxncEQzbDRnd0hjSW42VnF6dHYzcU93Q2dBeUJIZUctLTlMU3poVVBQQnNIVUVQa3JxLUxCbmRoalBZNkpqckxZQlZuNHlkMFRQeGI2NUFrOXNhYWd4c1g4cGZPd2NZemt1bHBTNVlSV2dZMVFFanF0aDVLOWhULUtWeldLelhaYWNfRk45Ti10ak10c3p3SDl4SnE0QklnRUpfUm5qeXkxRUlWTzd2X3E2MzhZY0g0dWVhaUQ1Qy1nQQ?oc=5",
+   "source": "ITWeb",
+   "source_url": "https://www.itweb.co.za",
+   "published": "2026-08-18T07:00:00+00:00",
+   "topic": "Fire risk",
+   "id": "116bcfa199ba9351"
+  },
+  {
+   "title": "Structural fire risk increases as built environment evolves",
+   "link": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxOelZSd0NUTWJpOVl1MHFva3pMdU5lRHhJaFQ3elBvRkFlZ2x6eFVHLVc4aURUaXU3aHU3NGxMcWZzWXh4d2o4cUF4cnhJTjdKeldIdGM3ZjdMWkxFeDhwSVZWa3FfcnNXbXdhV0VKTC11cENBc1pET2plWllQejVQLUltUkdaWV9MLXVzbmFlalpad09KYTdobjZhT19XWHg4cDFqYXlmdU1ncEkzbDZwUi1ZdzZHMlRHVUIwUVFDdms?oc=5",
+   "source": "fanews.co.za",
+   "source_url": "https://www.fanews.co.za",
+   "published": "2026-08-24T07:00:00+00:00",
+   "topic": "Fire risk",
+   "id": "77d175e297c4bc44"
+  },
+  {
+   "title": "A5 veld Fire Leaflet.cdr",
+   "link": "https://news.google.com/rss/articles/CBMikgFBVV95cUxNNThBR0NHTkY1VVNvVFJISmx5b1Y3X21qbnVvWmhPcm9TV09OOGhDOVN0d2czTjhnM1dMTEh1amZvY3FFcHpqZnQ0N3lLTUdBbk5ONk41R1BJcGVreG53Y1hSTk5jNGFuOFZVb0pIZEdJSHdqM3RxSE5KUmNxbHNiZXo3N2h3N3NNVGJSNGFmcjc3dw?oc=5",
+   "source": "Southern Cape Fire Protection Association",
+   "source_url": "https://scfpa.co.za",
+   "published": "2026-07-03T14:43:54+00:00",
+   "topic": "Fire risk",
+   "id": "c5eff581d715e2db"
+  },
+  {
+   "title": "Veld fire warning for Free State amid hot and dry conditions",
+   "link": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE05OFlKdzd2NUdwUmxwaW4tT3o3OXJUS2NFTHRSc3pnRmw1bW9ES1lNbDUzb0xmRGJmMjFpbE9BZ1lVM1p3T2cwdjZxRUw5eVNnbWlaSE56Zw?oc=5",
+   "source": "SABC News",
+   "source_url": "https://www.sabcnews.com",
+   "published": "2026-10-18T07:00:00+00:00",
+   "topic": "Fire risk",
+   "id": "39ae0e41defa8ccb"
+  },
+  {
+   "title": "Managing fire risk in combustible-core sandwich panel buildings",
+   "link": "https://news.google.com/rss/articles/CBMipAFBVV95cUxQTDZDZlh2WTFaOEY3ZkRqM1RqYjVFTVlIbGRjTGNULUZHb3lSbURUQlRONGNOZEFxRHBXNy1zSkt6aEMxaWxrWGZFMTk5bnAxd08wVU1ISWNvLUQyQ2t1T0NkRENVXzAtcV9JcEx4ajlDYmtjaVFhbmFvU1M4OHRYYzk2QzBhVWpUU1p0dHZZQXFwSFlmZmFtTzQxOVU3ak92WkdITw?oc=5",
+   "source": "Engineering News",
+   "source_url": "https://www.engineeringnews.co.za",
+   "published": "2026-09-18T07:00:00+00:00",
+   "topic": "Fire risk",
+   "id": "84c0f11cfb3f79e1"
+  },
+  {
+   "title": "Industrial and Manufacturing Fire Protection",
+   "link": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTFBTY0hxM3FEZ3hraXYwaEk0bkNQNUNFTDNxTzk3N3o5djhXMi00R3dEWDhxbHlfa3ltT2lXUXRQcjAzMnBlY1Fxb1JhdlhBVS0tODNkU09qYmtYb0xyWmJZR3hJRGd2ckE?oc=5",
+   "source": "Fire Risk Systems",
+   "source_url": "https://frssa.co.za",
+   "published": "2026-11-12T11:21:21+00:00",
+   "topic": "Fire risk",
+   "id": "f01e3e52dd5f72de"
+  },
+  {
+   "title": "Tackling fire risks in mining’s harshest environments",
+   "link": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxOb0ItT2VFMUtZSThDVTg3Z2hONnhENDFvMDQwV092UGZ4cGxBbzBaNTF2enRvUVpXU0YxV0MzZFVkWWZ5ZDRISGJsYUZqN0RpQXh6bHJUZmhVQ1ZQT3FnMzFrYkYySWlNZkhXQUJzWnJ3bU1ENUZRclZ4bFd6d09fSk40Mng1RjJ2c3F0d0UyYzdERVVlekRxdmJOa0tHeEhTUW5CaC1kUFJnd3hIc3B0TURRZDd4eVhE?oc=5",
+   "source": "crown.co.za",
+   "source_url": "https://www.crown.co.za",
+   "published": "2026-11-05T08:00:00+00:00",
+   "topic": "Fire risk",
+   "id": "c82cb9287d3df1f7"
+  },
+  {
+   "title": "New framework targets fire risks in building integrated photovoltaic façades",
+   "link": "https://news.google.com/rss/articles/CBMitgFBVV95cUxQT2RtQXZiQ25hdWpuR3RyTXlZdm5mZEd3VVMyQ1VzN293b3h1bGx1SWpvclByUzJUT2FpM3BvbHR1cjJCdTl1MFRoNmZQeVBUbG5vUFZVZXBuS2ZtaGZOd1FLeG5uRGh2OW9nRXZpYXJnUnItZHM1UlU2ZGg2S19kSGhuZmMxQ3pyLUJmYWVGV3ZOcklFeFdGRWMxVFg1UUVvOFQ1Nk5Vc1VjVURGdWY0dEJHbk9ndw?oc=5",
+   "source": "Green Building Africa",
+   "source_url": "https://www.greenbuildingafrica.co.za",
+   "published": "2026-10-21T07:00:00+00:00",
+   "topic": "Fire risk",
+   "id": "c81cd48df5b04c1d"
+  },
+  {
+   "title": "Digital Fire Maintenance Reports and Records | FRS",
+   "link": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE1QUUdaX0dBb1J1QTNrSmpOMzU4dk1VS1d1ajJmczZfZDlDLXBPeE1iZFFBcGhSUDRsOVZfQmduelBacXFEaG5RQVR5NkJnREtrU0plaU10M0Q4SVI3SnRYZEQ3OUxTUQ?oc=5",
+   "source": "Fire Risk Systems",
+   "source_url": "https://frssa.co.za",
+   "published": "2026-11-12T13:05:44+00:00",
+   "topic": "Fire risk",
+   "id": "63dd61afd25f5d65"
+  },
+  {
+   "title": "Search - Tag - Veld Fire fighting",
+   "link": "https://news.google.com/rss/articles/CBMikAFBVV95cUxPVl9yeEZpcEdFbTIyX2lmVm5ERGt3bEZudVJSVm9iSFlabnpMMFlqZDVZQ0FNRDhieU95WXp4bmZadzJzQjQzRzVLMk1ZNlM2aHZoOFduQWh6aUJWUWR0RVdTMjVYSm5LbzJxYkl0YmZvVGNiYl9tYUJCZXhONGM4NElreTZlZ0F5MmVCNFBBbno?oc=5",
+   "source": "agmarket.co.za",
+   "source_url": "https://www.agmarket.co.za",
+   "published": "2026-11-19T12:47:37+00:00",
+   "topic": "Fire risk",
+   "id": "a30fc7f31ec2402b"
+  },
+  {
+   "title": "Fire Detection and Alarm Systems",
+   "link": "https://news.google.com/rss/articles/CBMiakFVX3lxTFBnNElhNmcyR0tzRlNka1ZobU9INDVfSVFUM3JlU1oyZzBBZDlSd3ZDWFBpaThCTEM5Njl0THlJallCM09CWXpPVzMxUVBkRWxjaTRUS1FUbFlDZVNVRWJraDFCQ1J1QzZMUmc?oc=5",
+   "source": "Fire Risk Systems",
+   "source_url": "https://frssa.co.za",
+   "published": "2026-11-12T09:50:58+00:00",
+   "topic": "Fire risk",
+   "id": "0703301d1716c875"
+  },
+  {
+   "title": "Fire System Compliance Audits and Inspections | FRS",
+   "link": "https://news.google.com/rss/articles/CBMickFVX3lxTE1uLW1kd2xVMERuaTJBRHE3cDBYNUU1NnhvTHYzckFaUVNQUE94aVV4a3J6NlpfcFQ3ZzlQdFhpTEVWc3kyakc5NlBPaTlCdlFRMnIxZU9zZlJwc3FBdHhwTE82czhkSklKRmk5dHlsNEZyZw?oc=5",
+   "source": "Fire Risk Systems",
+   "source_url": "https://frssa.co.za",
+   "published": "2026-11-12T11:22:17+00:00",
+   "topic": "Fire risk",
+   "id": "0bc16f071ec8d633"
+  },
+  {
+   "title": "Energy and Utilities Fire Protection",
+   "link": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE1qQU1WcGRSSXY5VmFoemdodnZTT2dXVHozZWstdG9XZUNScElZbzh0dTltcnkxQ1FnRmdNTk4xUlhOMlpiUkJJbmE3bkc3WXgwWnlCVGZRczlmd09a?oc=5",
+   "source": "Fire Risk Systems",
+   "source_url": "https://frssa.co.za",
+   "published": "2026-11-12T11:21:31+00:00",
+   "topic": "Fire risk",
+   "id": "1b5266cb0a88afb0"
+  },
+  {
+   "title": "Residential Estate Fire Protection Services South Africa",
+   "link": "https://news.google.com/rss/articles/CBMilgFBVV95cUxOVU5oOHdQN1A5UXRuZWtmbUVoVmVlZzdoS2loeUZnc3pDWkhLV2REN0xnTFY2Z0g5RlNnS291c1cwUklqdmVRMHlaSjlJVHNaRWJTRjVIR3EtVFh4U2hoUnFoa2c5ZU02eVZYM1FXWGJLejVGTjdZQVVUMWZaemNrWkFFN0thMjRSVkdvSlZHM1BQMGlTMXc?oc=5",
+   "source": "JCK Fire",
+   "source_url": "https://www.jckfire.co.za",
+   "published": "2026-06-23T10:56:03+00:00",
+   "topic": "Fire risk",
+   "id": "fb23d86f4de90fb0"
+  },
+  {
+   "title": "Beyond the breach: How financial institutions are rethinking cyber risk and resilience",
+   "link": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxPTzdtMDRodWt6OHNNNmtwV2gtb0d5blpPMDQ1c1FsQkh2TDhwVDd4TEZKZ002enUwdTlFU3labGVTV1M1Z0cwNjRUNVFRQXNzY3hjTjFXM1FrUTBXY0pndGVUTTBBR01QaWF5VV9LSUlPSkM5a3RrV3BubmZJN2tlQm9GcjRCV1dpV1lTODBZc3pCZU84U0R5TGdJb2otNUdUOWFjZDZOVm5IWkxYMUY0TkJRdFJ2ZUtuZWM2MlhleTM4Uk5vU2hzRVR4c1VwWkFWdXc?oc=5",
+   "source": "businesslink.co.za",
+   "source_url": "https://businesslink.co.za",
+   "published": "2026-10-22T07:00:00+00:00",
+   "topic": "Cyber insurance",
+   "id": "840e8700bb728cd0"
+  },
+  {
+   "title": "Cyber Insurance | What the Wording and POPIA Say",
+   "link": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE4wa3k0a1ZIeEhTLWIxa2FvdU1JSnZGR2dPWmRJem5LTnpYdngxY252TmlvYU94bUtuNms3MVZqRU5LSjVzeG9UMw?oc=5",
+   "source": "cyberinsurance.co.za",
+   "source_url": "https://www.cyberinsurance.co.za",
+   "published": "2026-09-24T17:26:49+00:00",
+   "topic": "Cyber insurance",
+   "id": "68f4144cca9f4b32"
+  },
+  {
+   "title": "Cyber Insurance Gqeberha | Supplier Risk",
+   "link": "https://news.google.com/rss/articles/CBMiakFVX3lxTFBCa0pwd3EzZ3VPak9BVXFERHlOQ3kzTEhNNEdzczhJU1RLdlc4UmVHckxnVHRVdDVHNnRndTJIZ0x1TWVNVjR3V0tmWmFkTmRnZS1ONXZfNkxiQUtZZThOTFM5QTNPdmRMREE?oc=5",
+   "source": "cyberinsurance.co.za",
+   "source_url": "https://www.cyberinsurance.co.za",
+   "published": "2026-11-12T01:05:24+00:00",
+   "topic": "Cyber insurance",
+   "id": "63da56d0e41bed58"
+  },
+  {
+   "title": "Cyber Insurance Kimberley | Cover Explained",
+   "link": "https://news.google.com/rss/articles/CBMia0FVX3lxTE5XTUIzLVJsZ0NGREdKcFdNdGhEc1JHampDUWZqdTVCUGNZQTNvUnBGY2VsX1RTMlVOVm5QZDhiNTRIRVVLQkJmejFWYmhHR1lCTmhVbzM0VEVJbmZhd01wMHdFRWd5OE5sdkl3?oc=5",
+   "source": "cyberinsurance.co.za",
+   "source_url": "https://www.cyberinsurance.co.za",
+   "published": "2026-11-03T20:17:01+00:00",
+   "topic": "Cyber insurance",
+   "id": "9dc87c39726dc4de"
+  },
+  {
+   "title": "Cyber Risk Calculator",
+   "link": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE1URmZjLXJTaUs0bEw1U3d5eS1vUnYzSDJJazQyT043MmZtS21mTEptNkxRZ01sNUUzSmFGMmtBUDVZUml4T0JvSVZaWkFLdTA0X2pROQ?oc=5",
+   "source": "SCG South Africa",
+   "source_url": "https://scgsa.co.za",
+   "published": "2026-06-28T00:40:56+00:00",
+   "topic": "Cyber insurance",
+   "id": "b43d5d16b04d5448"
+  },
+  {
+   "title": "Cyber Risk Assessment Services",
+   "link": "https://news.google.com/rss/articles/CBMigwFBVV95cUxQTmlycDBlV091dkoyYThmUnU5cVJhZnFzVlVWblNBSXhJaHIzNFE3VFE4bUF1aW5xMmpSdW1iVWw3ZFNxVko4dFFmZ3NZRE1pbWhsMDhpS0M0MDlEZk9RRlpma0poSElGU3NPd1IzS0hmSGVyVFhsX0MxRjdMcDlLTm5IOA?oc=5",
+   "source": "Cyber Resilience Africa",
+   "source_url": "https://cyberres.co.za",
+   "published": "2026-11-13T15:08:46+00:00",
+   "topic": "Cyber insurance",
+   "id": "c262c779df1fb82b"
+  },
+  {
+   "title": "Cyber Insurance Durban | Extortion and Cover",
+   "link": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE5UY0E5WE1RYXNPMnpXekdqOXJrdTdoeExtd01nREl4Q0o2cVVTcy1VMHpxbUlxVElhY2FlMkxTeUw4Uk1nNm9wOGhreUJMNzRqY0lLYlR6YmQ2NXcxTXFFdkdzTUp1ZWc?oc=5",
+   "source": "cyberinsurance.co.za",
+   "source_url": "https://www.cyberinsurance.co.za",
+   "published": "2026-11-03T23:35:06+00:00",
+   "topic": "Cyber insurance",
+   "id": "e22ed7e3d4c7aaaf"
+  },
+  {
+   "title": "Security-First IT Support & Cyber Security",
+   "link": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE9nU1MyQk9jRV91ek9heUJILTRBUC1PTVRpb3RtOTJyTU93dks1d09wY1dwX0ZGVk56NFJYck1jdVEtZHhQdy1qUjMxQjllUFZvbjc0?oc=5",
+   "source": "Lamont IT",
+   "source_url": "https://litsa.co.za",
+   "published": "2026-11-15T04:56:20+00:00",
+   "topic": "Cyber insurance",
+   "id": "c5f011dce7aeefb6"
+  },
+  {
+   "title": "Cyber insurance: ransomware endorsement’s higher retention applies",
+   "link": "https://news.google.com/rss/articles/CBMizwFBVV95cUxOdHR0LUxyRUpUdW1yZEVIR0s5MHY2TkwyZFBHMkVsQVZCaUdCSlNRQmJFdFQ0YUUyR25PZG5uT19qRWlJS3M3VGVNTmtiS3pIXzF6MHFGM1lyWnJWZFhzal95YXY4eUdneHRYQ3ktQmlYbC1wUEpMUjgzdVIwanNGRTRHOXk0UVlweGN6X3RKZV8xWHhlRmhaakNJQ1NPQ0gxSlZteXpxVjJvS2N6aHZBTFZXcklGVlVOdWtSSnIzQmFWRU1OWFA5ZmdhZzBTc0E?oc=5",
+   "source": "FAnews",
+   "source_url": "https://www.fanews.co.za",
+   "published": "2026-11-10T00:00:00+00:00",
+   "topic": "Cyber insurance",
+   "id": "92ad0ee3e028873c"
+  },
+  {
+   "title": "Is cyber insurance worth it for a small business in South Africa?",
+   "link": "https://news.google.com/rss/articles/CBMijAFBVV95cUxOTnFKeFJmTUYzQVlxcFZSRTlXRU9TWWhQTnVqVGNwNjc1eHFKeXl2enBwMWRzcDdVazZ6T2p2ZUtrdU1UbWR2QkM2cVBmZDZ1M3B6UUpYVFNHTjQ5RS1mYXVOMVd0YndIYlJfSnVhRHpRb1czdzhlTnNjNTA5UjVzTjB5MTVYNnFzcm9BNQ?oc=5",
+   "source": "Garden Route Insurance Brokers",
+   "source_url": "https://grib.co.za",
+   "published": "2026-09-01T12:39:05+00:00",
+   "topic": "Cyber insurance",
+   "id": "474aeaae3a49ede4"
+  },
+  {
+   "title": "AI agent turns rogue in landmark cyber attack",
+   "link": "https://news.google.com/rss/articles/CBMimgFBVV95cUxNR040VTM3REE0MUFkWmpoR2hCdWkwSFdaQUN6eWVPZGtKM2xTOXVvMzBMeTdaV05PMi1PcldGRjZoM1dSTWxDSG1yeDZJUVU5Z1dWMmxRbDVGWGFUeFZDNkJhanBNQWt0empnNWVpWWxZN2JjcGxROWZxOXZnU0E2ZDU4eEpKS0k0Umd6QURkTmxPdEN0Q040V0pn?oc=5",
+   "source": "ITWeb",
+   "source_url": "https://www.itweb.co.za",
+   "published": "2026-07-23T07:00:00+00:00",
+   "topic": "Cyber insurance",
+   "id": "69b1e8623c23ac63"
+  },
+  {
+   "title": "Cyber Risk & Digital Protection",
+   "link": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE42T3BFUURqTlExdDVfeU5oR1FKWDFreHMyc1puWnFUeEFxV0hsNklQQXRuSUxmQmpjajJ6ZXVGSU9KM0dUYlRSMXFtZ0RCMldjMmw3T0FVa080X3Q1ZXRn?oc=5",
+   "source": "shiftingculture.co.za",
+   "source_url": "https://shiftingculture.co.za",
+   "published": "2026-09-20T20:26:48+00:00",
+   "topic": "Cyber insurance",
+   "id": "d43769b88c3a1915"
+  },
+  {
+   "title": "Blog Articles | Cyber Security Risks | IT Security",
+   "link": "https://news.google.com/rss/articles/CBMiPEFVX3lxTE9acGd6MF9tM3Y0QWhzUnpLYVlmMS1qeGJOTElTeFhodHBVb01udENtVzk4TzJ3WXlxLXJ6Rw?oc=5",
+   "source": "AVeS Cyber Security",
+   "source_url": "https://aves.co.za",
+   "published": "2026-10-09T07:00:00+00:00",
+   "topic": "Cyber insurance",
+   "id": "f46f5cd287270c1b"
+  },
+  {
+   "title": "Cyber Security Solutions by Industry",
+   "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE1zazFjZE5wQjItSEJHbG5pTnFYbHJ1ZmpQY3h5clFlVzhCblItMzZqY2Q2ejVsVWxWdkRMTzZLUFFBSjViRzNtWDBB?oc=5",
+   "source": "Cyber Resilience Africa",
+   "source_url": "https://cyberres.co.za",
+   "published": "2026-11-13T18:57:50+00:00",
+   "topic": "Cyber insurance",
+   "id": "ab8c3fb303196a3d"
+  },
+  {
+   "title": "Cyber Governance & ISO 27001 Services",
+   "link": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE55RFVqNHEyNnFaSFc3aFVpS3g4Q0tCeDY3d2tuN1Fwem5FOTNydm9ySl9KMFZxZVF5Zjd0Y2RpMzZkTDNfRDcycW5xZklrbkVhck9Da3VtLXlWZw?oc=5",
+   "source": "Cyber Resilience Africa",
+   "source_url": "https://cyberres.co.za",
+   "published": "2026-11-13T12:36:29+00:00",
+   "topic": "Cyber insurance",
+   "id": "a337866cbfa4f233"
+  },
+  {
+   "title": "Actuarial Cyber Risk Quantification",
+   "link": "https://news.google.com/rss/articles/CBMiREFVX3lxTE1uWnVmOWlyenBoOV9QUkpjZkZ0WGJ3aFFqaGliZjdXUDdXYXZuNXNOWUFfR3RxY0RqTTZQNUJfb3JvVml1?oc=5",
+   "source": "usta.co.za",
+   "source_url": "https://www.usta.co.za",
+   "published": "2026-11-11T22:35:22+00:00",
+   "topic": "Cyber insurance",
+   "id": "c2ccc10691eb8ee5"
+  },
+  {
+   "title": "What is cybersecurity compliance readiness?",
+   "link": "https://news.google.com/rss/articles/CBMiggFBVV95cUxQNjdVdWNQOWlJYndVaWJBTmRWa0NoYU5WM0E4Vk02RlBISHF1bUQ1Y1cyaWdDT0dWdHI2X0w4NnlIVGZ0bktfYTQtbTBVdFgyek9ESmFZUTBmWldjYWVqVnlUQ2xCLXdRVV83QmpvZkhnejFXZ0V0T0kzd0lTTTRYb2Jn?oc=5",
+   "source": "Cyber Resilience Africa",
+   "source_url": "https://cyberres.co.za",
+   "published": "2026-11-13T11:56:58+00:00",
+   "topic": "Cyber insurance",
+   "id": "dae5ffcf2a6f79cb"
+  },
+  {
+   "title": "Cyber Security Services Cape Town",
+   "link": "https://news.google.com/rss/articles/CBMiXkFVX3lxTFA1Wk9OUVlfUjNSdFJGYUwwbnVxenA3Y1BXUTQyUnI1QkhiY2txOENUanczaFFqZElZR00yaUtmNmdjdUpTazd6OTdkZHVjaDFOTzF3NHFsUmstR29XcUE?oc=5",
+   "source": "Introstat",
+   "source_url": "https://introstat.co.za",
+   "published": "2026-08-31T10:40:53+00:00",
+   "topic": "Cyber insurance",
+   "id": "a489372acfba45a2"
   }
  ]
 }
