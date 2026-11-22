@@ -35,9 +35,13 @@
       "jacarandafm.com",
       "newzroomafrika.com",
       "africanfinancials.com",
-      "sharenet.co.za"
+      "sharenet.co.za",
+      "cnbcafrica.com",
+      "marklives.com",
+      "biznews.com",
+      "joburgetc.com"
     ],
-    "topic_context": "(\"South Africa\" OR \"South African\" OR SARS OR JSE OR rand)",
+    "topic_context": "South Africa",
     "international_outlets": [
       "reuters.com",
       "ft.com"
