@@ -31,6 +31,7 @@ import os
 import random
 import re
 import sys
+import time
 import urllib.parse
 import xml.etree.ElementTree as ET
 from collections import Counter, defaultdict
@@ -81,7 +82,13 @@ def fetch_google_news(brand: dict, cfg: dict, lookback_days: int) -> list[dict]:
         + urllib.parse.quote(q)
         + f"&hl={region['hl']}&gl={region['gl']}&ceid={region['ceid']}"
     )
-    resp = requests.get(url, timeout=30, headers={"User-Agent": "fs-marketing-tracker/1.0"})
+    # Be polite to Google News and retry when it asks us to slow down (HTTP 429) or hiccups (5xx).
+    for attempt in range(4):
+        time.sleep(cfg.get("request_delay_seconds", 2))
+        resp = requests.get(url, timeout=30, headers={"User-Agent": "fs-marketing-tracker/1.0"})
+        if resp.status_code not in (429, 500, 502, 503, 504) or attempt == 3:
+            break
+        time.sleep(15 * (attempt + 1))
     resp.raise_for_status()
     root = ET.fromstring(resp.content)
     items = []
@@ -96,9 +103,17 @@ def fetch_google_news(brand: dict, cfg: dict, lookback_days: int) -> list[dict]:
             published = parsedate_to_datetime(node.findtext("pubDate")).astimezone(timezone.utc)
         except Exception:
             published = datetime.now(timezone.utc)
+        if excluded(title, cfg):
+            continue
         items.append({"brand": brand["name"], "title": title, "link": link,
                       "source": source or "Unknown", "published": published.isoformat()})
     return items
+
+
+def excluded(title: str, cfg: dict) -> bool:
+    """Drops listings that aren't news, such as share-price quote pages."""
+    t = title.lower()
+    return any(x in t for x in cfg.get("exclude_titles", []))
 
 
 def classify(title: str, cfg: dict) -> str:
@@ -684,11 +699,14 @@ def main() -> int:
         items, topic_items, demo = demo_items(cfg), demo_topic_items(cfg), True
     else:
         # A live run replaces any sample data.
-        known = {} if history.get("demo") else {i["id"]: i for i in history["items"] if "segment" in i}
-        # First live run: look further back so the 30- and 90-day views start with data.
-        lookback = cfg["lookback_days_per_run"] if known else cfg.get("backfill_days", 30)
+        known = {} if history.get("demo") else {i["id"]: i for i in history["items"]
+                                                  if "segment" in i and not excluded(i["title"], cfg)}
+        have = {(i["segment"], i["brand"]) for i in known.values()}
         for seg_name, seg in cfg["segments"].items():
             for brand in seg["brands"]:
+                # A brand (or topic) with no history yet looks further back, so new
+                # additions and earlier failed fetches fill their 30-day view.
+                lookback = cfg["lookback_days_per_run"] if (seg_name, brand["name"]) in have else cfg.get("backfill_days", 30)
                 try:
                     for it in fetch_google_news(brand, cfg, lookback):
                         it["segment"] = seg_name
@@ -704,9 +722,11 @@ def main() -> int:
         cutoff = now - timedelta(days=cfg["history_days"])
         items = [i for i in known.values() if parse(i["published"]) >= cutoff]
 
-        known_t = {} if history.get("demo") else {i["id"]: i for i in history.get("topic_items", [])}
-        t_lookback = cfg["lookback_days_per_run"] if known_t else cfg.get("backfill_days", 30)
+        known_t = {} if history.get("demo") else {i["id"]: i for i in history.get("topic_items", [])
+                                                    if not excluded(i["title"], cfg)}
+        have_t = {i["topic"] for i in known_t.values()}
         for topic in cfg.get("topics", []):
+            t_lookback = cfg["lookback_days_per_run"] if topic["name"] in have_t else cfg.get("backfill_days", 30)
             try:
                 for it in fetch_google_news({"name": topic["name"], "query": topic["query"]}, cfg, t_lookback):
                     it["topic"] = it.pop("brand")

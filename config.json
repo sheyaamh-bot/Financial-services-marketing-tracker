@@ -7,6 +7,18 @@
   },
   "lookback_days_per_run": 3,
   "backfill_days": 30,
+  "request_delay_seconds": 2,
+  "exclude_titles": [
+    "stock price, news, quote",
+    "stock price & news",
+    "stock quote",
+    "share price & news",
+    "share price, news",
+    "stock price today",
+    "stock price and chart",
+    "marketscreener",
+    "quote and history"
+  ],
   "history_days": 180,
   "segments": {
     "Wealth": {
