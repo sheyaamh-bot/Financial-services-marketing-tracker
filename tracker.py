@@ -133,6 +133,19 @@ def south_african(source_url: str, cfg: dict) -> bool:
     return domain.endswith(".za") or any(domain == d or domain.endswith("." + d) for d in allowed)
 
 
+def topic_queries(topic: dict, cfg: dict) -> list[str]:
+    """Topic terms are global (TFSA is also Canadian, for example), so each topic runs two searches:
+    one limited to South African websites and one asking for South Africa. Results are merged and
+    then pass the same South African outlet filter as everything else."""
+    rule = cfg.get("south_africa_only")
+    if not rule:
+        return [topic["query"]]
+    sites = ["co.za"] + rule.get("outlet_domains", []) + rule.get("international_outlets", [])
+    site_clause = " OR ".join(f"site:{d}" for d in sites)
+    context = rule.get("topic_context", "South Africa")
+    return [f"({topic['query']}) ({site_clause})", f"({topic['query']}) {context}".strip()]
+
+
 def excluded(title: str, cfg: dict) -> bool:
     """Drops listings that aren't news, such as share-price quote pages."""
     t = title.lower()
@@ -755,12 +768,11 @@ def main() -> int:
         for topic in cfg.get("topics", []):
             t_lookback = cfg["lookback_days_per_run"] if topic["name"] in have_t else cfg.get("backfill_days", 30)
             try:
-                context = (cfg.get("south_africa_only") or {}).get("topic_context", "")
-                query = f"({topic['query']}) {context}".strip()
-                for it in fetch_google_news({"name": topic["name"], "query": query}, cfg, t_lookback):
-                    it["topic"] = it.pop("brand")
-                    it["id"] = item_id(topic["name"], it["link"], it["title"])
-                    known_t.setdefault(it["id"], it)
+                for query in topic_queries(topic, cfg):
+                    for it in fetch_google_news({"name": topic["name"], "query": query}, cfg, t_lookback):
+                        it["topic"] = it.pop("brand")
+                        it["id"] = item_id(topic["name"], it["link"], it["title"])
+                        known_t.setdefault(it["id"], it)
             except Exception as exc:
                 errors.append(f"Topic {topic['name']}: {exc}")
                 print(f"Fetch failed for topic {topic['name']}: {exc}", file=sys.stderr)
