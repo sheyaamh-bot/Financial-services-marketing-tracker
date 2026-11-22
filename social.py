@@ -54,15 +54,43 @@ def _get(url: str, **kw) -> requests.Response:
 # --------------------------------------------------------------------------- #
 # Account discovery
 # --------------------------------------------------------------------------- #
-def discover_from_website(url: str) -> dict:
-    html = _get(url).text
-    found = {}
-    for platform, rx in PATTERNS.items():
-        hits = [m.group(1).rstrip("/.") for m in rx.finditer(html)]
-        hits = [h for h in hits if h.lower() not in SKIP.get(platform, set())]
-        if hits:
-            found[platform] = Counter(hits).most_common(1)[0][0]
+EXTRA_PAGES = ["/contact-us", "/contact", "/about-us", "/about"]
+
+
+def discover_from_website(url: str, extra_urls: list[str] | None = None) -> dict:
+    """Reads the brand's homepage (and, if links are missing, its contact and about pages)
+    and takes the most-linked account on each platform."""
+    hits = {p: [] for p in PATTERNS}
+    pages = [url] + list(extra_urls or [])
+    base = url.rstrip("/")
+    pages += [base + p for p in EXTRA_PAGES]
+    first_error = None
+    for n, page in enumerate(pages):
+        if n > 0 and all(hits[p] for p in ("youtube", "instagram", "linkedin")):
+            break
+        try:
+            html = _get(page).text
+        except Exception as exc:
+            first_error = first_error or exc
+            continue
+        for platform, rx in PATTERNS.items():
+            hits[platform] += [m.group(1).rstrip("/.") for m in rx.finditer(html)
+                               if m.group(1).rstrip("/.").lower() not in SKIP.get(platform, set())]
+    found = {p: Counter(h).most_common(1)[0][0] for p, h in hits.items() if h}
+    if not found and first_error:
+        raise first_error
     return found
+
+
+def youtube_search_channel(brand: str) -> str | None:
+    """Finds a channel through YouTube's own search, accepted only when the channel's
+    name contains the brand name (so a fan or unrelated channel isn't picked up)."""
+    q = urllib.parse.urlencode({"search_query": brand + " South Africa", "sp": "EgIQAg%3D%3D"})
+    html = _get("https://www.youtube.com/results?" + q.replace("%253D", "%3D")).text
+    for cid, title in re.findall(r'"channelId":"(UC[\w\-]{22})","title":\{"simpleText":"([^"]+)"', html)[:5]:
+        if brand.lower().replace(" sa", "") in title.lower():
+            return "channel/" + cid
+    return None
 
 
 def resolve_accounts(cfg: dict, data_dir: Path, now: datetime, errors: list[str]) -> dict:
@@ -74,16 +102,25 @@ def resolve_accounts(cfg: dict, data_dir: Path, now: datetime, errors: list[str]
             name = b["name"]
             entry = cache.get(name, {})
             stale = not entry.get("discovered_at") or \
-                datetime.fromisoformat(entry["discovered_at"]) < now - timedelta(days=REDISCOVER_DAYS)
+                datetime.fromisoformat(entry["discovered_at"]) < now - timedelta(days=REDISCOVER_DAYS) or \
+                not all(entry.get(k) for k in ("youtube", "instagram", "linkedin"))  # retry gaps daily
             if stale and b.get("website"):
                 try:
-                    found = discover_from_website(b["website"])
+                    found = discover_from_website(b["website"], b.get("social_pages"))
                     entry = {**found, "discovered_at": now.isoformat(), "source": b["website"]}
                 except Exception as exc:
-                    errors.append(f"Social accounts for {name}: {exc}")
+                    errors.append(f"Social accounts for {name}: {str(exc)[:160]}")
                     entry = {**entry, "discovered_at": now.isoformat(), "source": b.get("website", "")}
+                if not entry.get("youtube"):
+                    try:
+                        ch = youtube_search_channel(name)
+                        if ch:
+                            entry["youtube"], entry["youtube_source"] = ch, "YouTube search"
+                    except Exception as exc:
+                        errors.append(f"YouTube search for {name}: {str(exc)[:160]}")
             cache[name] = entry
-            overrides = {k: v for k, v in (b.get("social") or {}).items() if v}
+            # A brand's "social" settings in config.json win. "-" means "don't track this platform".
+            overrides = {k: (None if v == "-" else v) for k, v in (b.get("social") or {}).items() if v}
             out[name] = {**{k: entry.get(k) for k in PATTERNS}, **overrides,
                          "manual": sorted(overrides), "source": entry.get("source")}
     path.write_text(json.dumps(cache, indent=1, ensure_ascii=False), encoding="utf-8")

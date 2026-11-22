@@ -64,7 +64,7 @@
         {
           "name": "Alexander Forbes",
           "query": "\"Alexander Forbes\"",
-          "website": "https://www.alexanderforbes.co.za"
+          "website": "https://www.alexforbes.com"
         },
         {
           "name": "Allan Gray",
@@ -114,7 +114,10 @@
         {
           "name": "Old Mutual",
           "query": "\"Old Mutual\" -\"Old Mutual Insure\"",
-          "website": "https://www.oldmutual.co.za"
+          "website": "https://www.oldmutual.co.za",
+          "social_pages": [
+            "https://www.oldmutual.co.za/contact-us/"
+          ]
         },
         {
           "name": "PSG Wealth",
@@ -164,7 +167,13 @@
         {
           "name": "Marsh SA",
           "query": "\"Marsh Africa\" OR \"Marsh South Africa\" OR \"Marsh McLennan\" South Africa",
-          "website": "https://www.marsh.com/za"
+          "website": "https://www.marsh.com/za",
+          "social": {
+            "youtube": "-",
+            "instagram": "-",
+            "facebook": "-",
+            "linkedin": "-"
+          }
         },
         {
           "name": "MiWay",
@@ -189,7 +198,10 @@
         {
           "name": "Santam",
           "query": "\"Santam\"",
-          "website": "https://www.santam.co.za"
+          "website": "https://www.santam.co.za",
+          "social": {
+            "linkedin": "santam"
+          }
         }
       ]
     }
@@ -570,7 +582,7 @@
     }
   ],
   "social": {
-    "_note": "Accounts are found on each brand's website. To correct one, add e.g. \"social\": {\"instagram\": \"handle\", \"youtube\": \"@handle\", \"linkedin\": \"company-slug\"} to that brand.",
+    "_note": "Accounts are found on each brand's website (and YouTube search for channels). To correct one, add e.g. \"social\": {\"instagram\": \"handle\", \"youtube\": \"@handle\", \"linkedin\": \"company-slug\"} to that brand. Use \"-\" to stop tracking a platform for a brand.",
     "graph_api_version": "v21.0"
   }
 }
