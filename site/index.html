@@ -48,8 +48,9 @@ h1{margin:2px 0 0;font-size:26px;font-weight:700;letter-spacing:-.02em;line-heig
 .btn{display:inline-flex;align-items:center;min-height:40px;padding:8px 16px;border-radius:8px;font:600 14px Inter,system-ui,sans-serif;text-decoration:none;border:1px solid rgba(255,255,255,.3);color:#fff;background:transparent;cursor:pointer}
 .btn.primary{background:#fff;color:#111418;border-color:#fff}
 .btn:hover{opacity:.9}
-.tabs{display:flex;gap:4px}
-.tab{font:600 15px Inter,system-ui,sans-serif;color:#B8C2CC;background:transparent;border:0;border-bottom:3px solid transparent;padding:10px 16px 12px;cursor:pointer;min-height:44px}
+.tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{white-space:nowrap;font:600 15px Inter,system-ui,sans-serif;color:#B8C2CC;background:transparent;border:0;border-bottom:3px solid transparent;padding:10px 16px 12px;cursor:pointer;min-height:44px}
 .tab[aria-selected="true"]{color:#fff;border-bottom-color:#fff}
 .tab:hover{color:#fff}
 .banner{background:#FFF4D6;color:#5A4300;font-weight:600;font-size:14px;padding:8px 16px;text-align:center;border-bottom:1px solid #F0DFAE}
@@ -99,6 +100,55 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
 .empty{color:var(--muted);font-size:13px;background:var(--surface-2);border-radius:8px;padding:14px}
 .tooltip{position:fixed;pointer-events:none;background:#111418;color:#fff;font-size:12px;padding:6px 9px;border-radius:6px;opacity:0;transition:opacity .1s;z-index:10}
 footer.wrap{color:var(--muted);font-size:12px;padding:0 16px 32px}
+/* Report and topics views */
+.controls{display:grid;gap:14px}
+.ctrl-row{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end}
+.field{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted);font-weight:500}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{position:relative}
+.chip input{position:absolute;opacity:0;width:1px;height:1px}
+.chip span{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:6px 12px;border:1px solid var(--border);border-radius:999px;font-size:13px;color:var(--ink-2);background:var(--surface);cursor:pointer;user-select:none}
+.chip span i{width:10px;height:10px;border-radius:3px;background:var(--neu);display:inline-block}
+.chip input:checked + span{border-color:var(--ink);color:var(--ink);font-weight:600}
+.chip input:focus-visible + span{outline:2px solid var(--accent);outline-offset:2px}
+.chip input:disabled + span{opacity:.45;cursor:not-allowed}
+.btn2{display:inline-flex;align-items:center;gap:6px;min-height:38px;padding:8px 14px;border-radius:8px;font:600 13px Inter,system-ui,sans-serif;border:1px solid var(--border);background:var(--surface);color:var(--ink);cursor:pointer;text-decoration:none}
+.btn2.primary{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.btn2:hover{opacity:.88}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap}
+.hint{font-size:13px;color:var(--muted)}
+.rep-title{margin:0;font-size:24px;font-weight:700;letter-spacing:-.02em}
+.rep-meta{color:var(--muted);font-size:13px;margin-top:2px}
+.summary li{margin:6px 0}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--surface-2);color:var(--ink-2)}
+.up{color:#0a7d3e}.down{color:#b3261e}
+:root[data-theme="dark"] .up{color:#5fd08f}:root[data-theme="dark"] .down{color:#ff8a80}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .up{color:#5fd08f}:root:not([data-theme="light"]) .down{color:#ff8a80}}
+tr.you td{font-weight:600;background:var(--surface-2)}
+.topic-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.topic-card{text-align:left;font:inherit;color:inherit;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;cursor:pointer;min-width:0}
+.topic-card:hover{border-color:var(--ink-2)}
+.topic-card[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.topic-card .t-name{font-weight:600;font-size:15px}
+.topic-card .t-num{font-size:24px;font-weight:700;letter-spacing:-.02em;margin-top:4px}
+.topic-card svg{display:block;width:100%;height:36px;margin-top:6px}
+.searchbar{display:flex;gap:8px;flex-wrap:wrap}
+.searchbar input[type=search]{flex:1 1 260px;font-size:15px;min-height:42px}
+mark{background:#FFE58A;color:#111418;border-radius:2px;padding:0 1px}
+.print-only{display:none}
+@media print{
+  @page{margin:14mm}
+  body{background:#fff;color:#111418}
+  header,.banner,#dashView,#topicsView,.controls,.no-print,footer{display:none !important}
+  #reportView{display:block !important}
+  .print-only{display:block}
+  .card{break-inside:avoid;border:1px solid #ccc}
+  .grid.g-2{grid-template-columns:1fr}
+  .chart-box{height:260px !important}
+  canvas{max-width:100% !important;width:100% !important;height:100% !important}
+  .feed{max-height:none;overflow:visible}
+}
+
 </style>
 </head>
 <body>
@@ -118,12 +168,15 @@ footer.wrap{color:var(--muted);font-size:12px;padding:0 16px 32px}
     <div class="tabs" role="tablist" aria-label="Sector">
       <button class="tab" role="tab" id="tab-Wealth" data-seg="Wealth" aria-selected="true">Wealth</button>
       <button class="tab" role="tab" id="tab-Insure" data-seg="Insure" aria-selected="false">Insurance</button>
+      <button class="tab" role="tab" id="tab-report" data-view="report" aria-selected="false">Competitor report</button>
+      <button class="tab" role="tab" id="tab-topics" data-view="topics" aria-selected="false">Topics &amp; search</button>
     </div>
   </div>
 </header>
 <div class="banner" id="demoBanner" hidden>Sample data for preview. Live coverage replaces it on the first morning run.</div>
 
 <main class="wrap" role="tabpanel">
+<div id="dashView">
   <section class="card briefing" id="briefing" style="margin-bottom:16px"></section>
 
   <section class="grid g-kpi" id="kpis" style="margin-bottom:16px"></section>
@@ -194,6 +247,9 @@ footer.wrap{color:var(--muted);font-size:12px;padding:0 16px 32px}
       <div id="social"></div>
     </div>
   </section>
+</div>
+<div id="reportView" hidden></div>
+<div id="topicsView" hidden></div>
 </main>
 <footer class="wrap">
   Built by Sheyaam Hill using Claude Code. An independent tracker from public news sources, not affiliated with any brand shown.
@@ -221,24 +277,47 @@ $("#themeBtn").onclick = () => {
 };
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", redraw);
 
-// Sector tabs (also set by #wealth / #insurance in the URL, so a link can open either).
-function pickFromHash(){
-  const h = location.hash.replace("#","").toLowerCase();
-  if (h === "insurance" || h === "insure") seg = "Insure"; else if (h === "wealth") seg = "Wealth";
+// Views: #wealth, #insurance, #report?..., #topics?... (so any view can be shared as a link).
+let view = "dash";
+function parseHash(){
+  const raw = location.hash.replace(/^#/, ""), [path, query] = raw.split("?");
+  return { path: decodeURIComponent(path || "").toLowerCase(), params: new URLSearchParams(query || "") };
 }
-document.querySelectorAll(".tab").forEach(t => t.onclick = () => { seg = t.dataset.seg; history.replaceState(null, "", "#" + SECTOR[seg]); render(); });
-window.addEventListener("hashchange", () => { pickFromHash(); render(); });
+function pickFromHash(){
+  const { path } = parseHash();
+  if (path === "report") view = "report";
+  else if (path === "topics" || path === "search") view = "topics";
+  else { view = "dash"; if (path === "insurance" || path === "insure") seg = "Insure"; else if (path === "wealth") seg = "Wealth"; }
+}
+function route(){
+  if (!D) return;
+  document.querySelectorAll(".tab").forEach(t => t.setAttribute("aria-selected",
+    view === "dash" ? t.dataset.seg === seg : t.dataset.view === view));
+  $("#dashView").hidden = view !== "dash";
+  $("#reportView").hidden = view !== "report";
+  $("#topicsView").hidden = view !== "topics";
+  $("main").setAttribute("aria-labelledby", view === "dash" ? "tab-" + seg : "tab-" + view);
+  if (view === "dash") render();
+  else if (view === "report") window.Report && Report.show(parseHash().params);
+  else window.Topics && Topics.show(parseHash().params);
+}
+document.querySelectorAll(".tab").forEach(t => t.onclick = () => {
+  if (t.dataset.view) { location.hash = t.dataset.view; return; }
+  seg = t.dataset.seg; view = "dash"; history.replaceState(null, "", "#" + SECTOR[seg]); route();
+});
+window.addEventListener("hashchange", () => { pickFromHash(); route(); });
 
-fetch("data.json", {cache: "no-store"}).then(r => r.json()).then(d => { D = d; pickFromHash(); render(); })
+fetch("data.json", {cache: "no-store"}).then(r => r.json()).then(d => {
+  D = d; pickFromHash();
+  $("#updated").textContent = `Updated ${d.meta.updated_local} SAST · refreshes every morning`;
+  $("#demoBanner").hidden = !d.meta.demo;
+  route();
+})
   .catch(() => { $("#briefing").innerHTML = '<p class="empty">Could not load data.json. Run tracker.py first.</p>'; });
 
 function render(){
   if (!D) return;
-  const m = D.meta, M = S().metrics, k = M.kpis;
-  document.querySelectorAll(".tab").forEach(t => t.setAttribute("aria-selected", t.dataset.seg === seg));
-  $("main").setAttribute("aria-labelledby", "tab-" + seg);
-  $("#updated").textContent = `Updated ${m.updated_local} SAST · refreshes every morning`;
-  $("#demoBanner").hidden = !m.demo;
+  const M = S().metrics, k = M.kpis;
 
   const b = S().briefing;
   $("#briefing").innerHTML = `
@@ -273,7 +352,12 @@ function render(){
 
   redraw(); renderOutlets(); renderFeed(); renderManual();
 }
-function redraw(){ if (!D) return; drawCharts(); renderHeat(); renderSent(); }
+function redraw(){
+  if (!D) return;
+  if (view === "dash") { drawCharts(); renderHeat(); renderSent(); }
+  else if (view === "report") window.Report && Report.redraw();
+  else window.Topics && Topics.redraw();
+}
 
 function tooltipOpts(){
   return { backgroundColor: "#111418", titleColor: "#fff", bodyColor: "#fff", padding: 10, cornerRadius: 6, boxPadding: 4 };
@@ -397,5 +481,8 @@ function bindTips(root){
   });
 }
 </script>
+<script src="shared.js"></script>
+<script src="report.js"></script>
+<script src="topics.js"></script>
 </body>
 </html>

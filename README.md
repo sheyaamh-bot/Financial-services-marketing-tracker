@@ -12,6 +12,14 @@ Share of voice is calculated within each sector. Every morning it produces:
 - **A dashboard** (`site/index.html`) with a Wealth | Insurance switch and a picker to compare any two brands. Add `#insurance` to the link to open the Insurance view.
 - **An Excel workbook** (`site/Financial_Services_Marketing_Tracker.xlsx`), downloadable from the dashboard.
 
+## What people can do with it
+
+- **Daily dashboard (Wealth and Insurance tabs).** Share of voice, coverage trends, activity mix, tone, top outlets and a morning briefing.
+- **Competitor report.** Pick your brand, up to six competitors and a period (7, 30 or 90 days). The report shows how you're tracking: a summary, head-to-head table, share of voice in the group, coverage over time, activity mix, tone, outlet gaps (publications covering competitors but not you) and the latest competitor headlines. Download it as a PDF or Excel file, or copy a link that reopens the same report.
+- **Topics and search.** Tracked topics (for example retirement, tax-free savings, fire risk, commercial insurance) are collected every morning as their own news searches. Each shows its volume over time, which brands own the conversation, top outlets and headlines. A search box finds any word across everything collected in the last 90 days.
+
+Every view has its own link, for example `#report?sector=wealth&you=Allan Gray&vs=Coronation|Ninety One&days=30` or `#topics?topic=Fire risk`.
+
 ## What it tracks
 
 | Area | Source | Updates |
@@ -22,10 +30,21 @@ Share of voice is calculated within each sector. Every morning it produces:
 | Headline tone | Headline keywords | Automatic |
 | Top outlets | Google News | Automatic |
 | Morning briefing | Rules, or Claude if an API key is set | Automatic |
+| Tracked topics | Google News, per topic | Automatic |
 | Campaign and activity log | `data/campaigns.csv` | Manual |
 | Social followers | `data/social.csv` | Manual |
 
 Edit `config.json` to add or remove brands, change search terms or tune the category keywords.
+
+To add a topic, add an entry under `topics` in `config.json`:
+
+```json
+{"name": "Medical aid", "sector": "Insure",
+ "query": "\"medical aid\" OR \"medical scheme\" South Africa",
+ "keywords": ["medical aid", "medical scheme"]}
+```
+
+`query` is the daily news search. `keywords` link tracked brands' own headlines to the topic.
 
 ## How it runs
 
@@ -68,5 +87,7 @@ date,brand,platform,followers,notes
 
 - Not affiliated with any brand shown.
 - Mentions are news items. They are not reach, impressions or advertising value equivalent (AVE).
+- The first live run looks back 30 days. After that, history builds daily, so 90-day views fill up over three months.
+- Brands are linked to a topic only when a headline names them.
 - Categories and tone come from headline keywords. Treat them as signals and tune `config.json` over time.
 - Google News RSS suits monitoring and demonstration. For commercial redistribution, use a licensed media-monitoring feed.

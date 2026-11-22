@@ -29,6 +29,7 @@ import html
 import json
 import os
 import random
+import re
 import sys
 import urllib.parse
 import xml.etree.ElementTree as ET
@@ -72,9 +73,9 @@ def item_id(segment: str, link: str, title: str) -> str:
     return hashlib.sha1(f"{segment}|{link}|{title}".encode("utf-8")).hexdigest()[:16]
 
 
-def fetch_google_news(brand: dict, cfg: dict) -> list[dict]:
+def fetch_google_news(brand: dict, cfg: dict, lookback_days: int) -> list[dict]:
     region = cfg["region"]
-    q = f"({brand['query']}) when:{cfg['lookback_days_per_run']}d"
+    q = f"({brand['query']}) when:{lookback_days}d"
     url = (
         "https://news.google.com/rss/search?q="
         + urllib.parse.quote(q)
@@ -128,11 +129,15 @@ def demo_items(cfg: dict) -> list[dict]:
     for seg_name, seg in cfg["segments"].items():
         for n, b in enumerate(seg["brands"]):
             weight = rnd.randint(2, 9)
-            for day in range(60):
+            for day in range(100):
                 for _ in range(rnd.randint(0, weight)):
                     cat = rnd.choice(cats)
                     ts = now - timedelta(days=day, hours=rnd.randint(0, 20))
                     title = f"[Sample] {b['name']}: {cat.lower()} story"
+                    if rnd.random() < 0.25:
+                        topic = rnd.choice([t for t in cfg.get("topics", []) if t["sector"] == seg_name] or [None])
+                        if topic:
+                            title += f" on {topic['keywords'][0].strip()}"
                     link = f"https://example.com/sample/{seg_name.lower()}/{n}/{day}/{rnd.randint(1, 99999)}"
                     out.append({
                         "id": item_id(seg_name, link, title), "segment": seg_name, "brand": b["name"],
@@ -141,6 +146,39 @@ def demo_items(cfg: dict) -> list[dict]:
                         "sentiment": rnd.choice([1, 1, 0, 0, 0, -1]),
                     })
     return out
+
+
+def demo_topic_items(cfg: dict) -> list[dict]:
+    rnd = random.Random(7)
+    now = datetime.now(timezone.utc)
+    outlets = ["Moneyweb", "BusinessLIVE", "Daily Maverick", "News24", "IOL", "Personal Finance",
+               "Citizen", "Fin24", "FA News", "Insurance Times", "Cover", "MyBroadband"]
+    out = []
+    for t in cfg.get("topics", []):
+        brands = [b["name"] for b in cfg["segments"][t["sector"]]["brands"]]
+        weight = rnd.randint(1, 6)
+        for day in range(100):
+            for _ in range(rnd.randint(0, weight)):
+                named = rnd.choice(brands) if rnd.random() < 0.35 else None
+                title = f"[Sample] {t['name']} story" + (f" quoting {named}" if named else "")
+                link = f"https://example.com/sample/topic/{t['name'].lower().replace(' ', '-')}/{day}/{rnd.randint(1, 99999)}"
+                ts = now - timedelta(days=day, hours=rnd.randint(0, 20))
+                out.append({"id": item_id(t["name"], link, title), "topic": t["name"], "title": title, "link": link,
+                            "source": rnd.choice(outlets), "published": ts.isoformat()})
+    return out
+
+
+def brand_aliases(brand: dict) -> list[str]:
+    """Names to look for in a headline: the brand name plus every quoted phrase in its search query."""
+    names = {brand["name"].lower()} | {q.lower() for q in re.findall(r'"([^"]+)"', brand["query"])}
+    for extra in brand.get("aliases", []):
+        names.add(extra.lower())
+    return sorted(names)
+
+
+def matches(title: str, keywords: list[str]) -> bool:
+    text = f" {title.lower()} "
+    return any(k.lower() in text for k in keywords)
 
 
 # --------------------------------------------------------------------------- #
@@ -220,6 +258,95 @@ def build_metrics(items: list[dict], brands: list[str], cfg: dict, now: datetime
         "sentiment_30d": sent,
         "top_outlets": [{"source": s, "mentions": n, "by_brand": dict(by_outlet[s])} for s, n in outlets],
     }
+
+
+def build_report_data(items: list[dict], brands: list[str], cats: list[str], now: datetime, days: int = 90) -> dict:
+    """Compact, item-level data for the last `days` days, so the page can build a
+    report for any brand, competitor set and period without another download."""
+    day_list = [(now - timedelta(days=d)).astimezone(SAST).date().isoformat() for d in range(days - 1, -1, -1)]
+    day_ix = {d: n for n, d in enumerate(day_list)}
+    b_ix = {b: n for n, b in enumerate(brands)}
+    c_ix = {c: n for n, c in enumerate(cats)}
+    sources: list[str] = []
+    s_ix: dict[str, int] = {}
+    events = []
+    headlines: dict[str, list] = {b: [] for b in brands}
+    for i in sorted(items, key=lambda x: x["published"], reverse=True):
+        d = parse(i["published"]).astimezone(SAST).date().isoformat()
+        if d not in day_ix or i["brand"] not in b_ix:
+            continue
+        if i["source"] not in s_ix:
+            s_ix[i["source"]] = len(sources)
+            sources.append(i["source"])
+        cat = i.get("category", "Other coverage")
+        events.append([day_ix[d], b_ix[i["brand"]], c_ix.get(cat, len(cats) - 1), i.get("sentiment", 0), s_ix[i["source"]]])
+        if len(headlines[i["brand"]]) < 20:
+            headlines[i["brand"]].append({"d": day_ix[d], "title": i["title"], "link": i["link"],
+                                          "source": i["source"], "category": cat})
+    return {"days": day_list, "sources": sources, "events": events, "headlines": headlines}
+
+
+def build_topics_data(items: list[dict], topic_items: list[dict], cfg: dict, now: datetime, days: int = 90) -> dict:
+    """Per topic: daily volume, which brands appear in the conversation, outlets and headlines."""
+    day_list = [(now - timedelta(days=d)).astimezone(SAST).date().isoformat() for d in range(days - 1, -1, -1)]
+    day_ix = {d: n for n, d in enumerate(day_list)}
+    all_brands = [{"name": b["name"], "sector": seg} for seg, S in cfg["segments"].items() for b in S["brands"]]
+    b_ix = {(b["name"]): n for n, b in enumerate(all_brands)}
+    aliases = [(b_ix[b["name"]], brand_aliases(b)) for S in cfg["segments"].values() for b in S["brands"]]
+    sources: list[str] = []
+    s_ix: dict[str, int] = {}
+
+    def src(name: str) -> int:
+        if name not in s_ix:
+            s_ix[name] = len(sources)
+            sources.append(name)
+        return s_ix[name]
+
+    def day_of(i: dict):
+        return day_ix.get(parse(i["published"]).astimezone(SAST).date().isoformat())
+
+    out = []
+    for t in cfg.get("topics", []):
+        news, hits, heads = [], [], []
+        seen_links = set()
+        for i in sorted((x for x in topic_items if x["topic"] == t["name"]), key=lambda x: x["published"], reverse=True):
+            d = day_of(i)
+            if d is None:
+                continue
+            named = [n for n, al in aliases if matches(i["title"], al)]
+            news.append([d, src(i["source"])])
+            hits += [[d, n] for n in named]
+            seen_links.add(i["link"])
+            if len(heads) < 40:
+                heads.append({"d": d, "title": i["title"], "link": i["link"], "source": i["source"],
+                              "brands": [all_brands[n]["name"] for n in named]})
+        # Tracked-brand coverage that mentions the topic also counts towards that brand.
+        brand_heads = []
+        for i in sorted(items, key=lambda x: x["published"], reverse=True):
+            d = day_of(i)
+            if d is None or i["link"] in seen_links or not matches(i["title"], t["keywords"]):
+                continue
+            hits.append([d, b_ix[i["brand"]]])
+            if len(brand_heads) < 40:
+                brand_heads.append({"d": d, "title": i["title"], "link": i["link"], "source": i["source"],
+                                    "brands": [i["brand"]]})
+        out.append({"name": t["name"], "sector": t["sector"], "keywords": t["keywords"],
+                    "news": news, "brand_hits": hits, "headlines": heads, "brand_headlines": brand_heads})
+    return {"days": day_list, "brands": all_brands, "sources": sources, "topics": out}
+
+
+def build_search_index(items: list[dict], topic_items: list[dict], cfg: dict, now: datetime, days: int = 90) -> dict:
+    """Everything collected in the last `days` days, for the search box (loaded only when someone searches)."""
+    day_list = [(now - timedelta(days=d)).astimezone(SAST).date().isoformat() for d in range(days - 1, -1, -1)]
+    day_ix = {d: n for n, d in enumerate(day_list)}
+    rows, seen = [], set()
+    for i in sorted(items + topic_items, key=lambda x: x["published"], reverse=True):
+        d = day_ix.get(parse(i["published"]).astimezone(SAST).date().isoformat())
+        if d is None or i["link"] in seen:
+            continue
+        seen.add(i["link"])
+        rows.append([d, i["title"], i["source"], i.get("brand", ""), i.get("segment", ""), i.get("topic", ""), i["link"]])
+    return {"days": day_list, "fields": ["d", "title", "source", "brand", "sector", "topic", "link"], "rows": rows}
 
 
 # --------------------------------------------------------------------------- #
@@ -488,6 +615,19 @@ def build_excel(data: dict, items: list[dict], cfg: dict, path: Path):
             ws.append([seg, o["source"], o["mentions"], top[0], top[1]])
     style_table(ws, 4, 5, [10, 28, 11, 22, 18], wrap_cols=())
 
+    ws = wb.create_sheet("Topics")
+    title_block(ws, "Tracked topics", "Articles per topic and the brands most linked to each. Edit the topic list in config.json.")
+    ws.append([])
+    ws.append(["Topic", "Sector", "Articles (7d)", "Articles (30d)", "Articles (90d)", "Top brands (30d)"])
+    T = data["topics"]
+    n_days = len(T["days"])
+    for t in T["topics"]:
+        counts = [sum(1 for e in t["news"] if e[0] >= n_days - p) for p in (7, 30, 90)]
+        hits = Counter(T["brands"][b]["name"] for d, b in t["brand_hits"] if d >= n_days - 30)
+        ws.append([t["name"], "Insurance" if t["sector"] == "Insure" else "Wealth", *counts,
+                   ", ".join(f"{b} ({c})" for b, c in hits.most_common(3))])
+    style_table(ws, 4, 6, [26, 11, 13, 13, 13, 60], wrap_cols=("F",))
+
     ws = wb.create_sheet("Social tracker")
     title_block(ws, "Social followers", "Manual input: add rows to data/social.csv (date, brand, platform, followers).")
     ws.append([])
@@ -513,6 +653,8 @@ def build_excel(data: dict, items: list[dict], cfg: dict, path: Path):
         "Refreshes automatically every morning at about 05:15 SAST.",
         "Coverage comes from Google News for each brand's search terms in config.json.",
         "Categories and tone are keyword-based. Edit the keyword lists in config.json to tune them.",
+        "Topics are collected each morning as their own news searches. Brands are linked to a topic when a headline names them.",
+        "The online dashboard also builds competitor reports (PDF or Excel) and searches all coverage.",
         "Social followers and campaigns are manual inputs in the data folder.",
         "Mentions are news items, not reach or advertising value equivalent (AVE).",
     ]
@@ -539,14 +681,16 @@ def main() -> int:
 
     errors: list[str] = []
     if args.demo:
-        items, demo = demo_items(cfg), True
+        items, topic_items, demo = demo_items(cfg), demo_topic_items(cfg), True
     else:
         # A live run replaces any sample data.
         known = {} if history.get("demo") else {i["id"]: i for i in history["items"] if "segment" in i}
+        # First live run: look further back so the 30- and 90-day views start with data.
+        lookback = cfg["lookback_days_per_run"] if known else cfg.get("backfill_days", 30)
         for seg_name, seg in cfg["segments"].items():
             for brand in seg["brands"]:
                 try:
-                    for it in fetch_google_news(brand, cfg):
+                    for it in fetch_google_news(brand, cfg, lookback):
                         it["segment"] = seg_name
                         it["id"] = item_id(seg_name, it["link"], it["title"])
                         if it["id"] not in known:
@@ -559,12 +703,26 @@ def main() -> int:
                     print(f"Fetch failed for {brand['name']}: {exc}", file=sys.stderr)
         cutoff = now - timedelta(days=cfg["history_days"])
         items = [i for i in known.values() if parse(i["published"]) >= cutoff]
+
+        known_t = {} if history.get("demo") else {i["id"]: i for i in history.get("topic_items", [])}
+        t_lookback = cfg["lookback_days_per_run"] if known_t else cfg.get("backfill_days", 30)
+        for topic in cfg.get("topics", []):
+            try:
+                for it in fetch_google_news({"name": topic["name"], "query": topic["query"]}, cfg, t_lookback):
+                    it["topic"] = it.pop("brand")
+                    it["id"] = item_id(topic["name"], it["link"], it["title"])
+                    known_t.setdefault(it["id"], it)
+            except Exception as exc:
+                errors.append(f"Topic {topic['name']}: {exc}")
+                print(f"Fetch failed for topic {topic['name']}: {exc}", file=sys.stderr)
+        topic_items = [i for i in known_t.values() if parse(i["published"]) >= cutoff]
         demo = False
         if not items and errors:
             print("No data collected; leaving previous outputs untouched.", file=sys.stderr)
             return 1
 
-    store.write_text(json.dumps({"demo": demo, "items": items}, ensure_ascii=False, indent=1), encoding="utf-8")
+    store.write_text(json.dumps({"demo": demo, "items": items, "topic_items": topic_items},
+                                ensure_ascii=False, indent=1), encoding="utf-8")
 
     segments = {}
     for seg_name, seg in cfg["segments"].items():
@@ -574,7 +732,8 @@ def main() -> int:
         briefing = (None if demo else claude_briefing(seg_name, metrics, seg_items, cfg, now)) \
             or rule_based_briefing(seg_name, metrics, seg_items, now)
         recent = sorted(window(seg_items, 30, now), key=lambda i: i["published"], reverse=True)
-        segments[seg_name] = {"briefing": briefing, "metrics": metrics, "coverage": recent[:300]}
+        segments[seg_name] = {"briefing": briefing, "metrics": metrics, "coverage": recent[:300],
+                              "report": build_report_data(seg_items, brands, metrics["categories"], now)}
 
     data = {
         "meta": {
@@ -588,7 +747,10 @@ def main() -> int:
         "social": social_summary(read_csv(DATA / "social.csv")),
         "campaigns": sorted(read_csv(DATA / "campaigns.csv"), key=lambda r: r.get("date_spotted", ""), reverse=True),
     }
+    data["topics"] = build_topics_data(items, topic_items, cfg, now)
     SITE.mkdir(exist_ok=True)
+    (SITE / "search.json").write_text(json.dumps(build_search_index(items, topic_items, cfg, now),
+                                                 ensure_ascii=False), encoding="utf-8")
     (SITE / "data.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
     build_excel(data, items, cfg, SITE / WORKBOOK)
     print(f"Done: {len(items)} items, {len(errors)} fetch errors.")
