@@ -264,7 +264,7 @@ window.Report = (() => {
               <div class="meta">${esc(h.source)} · ${shortDate(c.R.days[h.d])} · ${esc(h.category)}</div></div></div>`).join("") : '<p class="hint">No headlines in this period.</p>'}</div>`;
         }).join("")}</div>
       </section>
-      <p class="hint print-only">Source: South African news coverage collected daily via Google News by the Financial Services Marketing Tracker. Mentions count news items, not reach or advertising value. Built by Sheyaam Hill using Claude Code.</p>`;
+      <p class="hint print-only">Source: South African news coverage, plus Reuters and the Financial Times, collected daily via Google News by the Financial Services Marketing Tracker. Mentions count news items, not reach or advertising value. Built by Sheyaam Hill using Claude Code.</p>`;
 
     renderMix(c);
     drawCharts(c);
@@ -320,7 +320,7 @@ window.Report = (() => {
         ["Sector", st.sector === "Insure" ? "Insurance" : "Wealth"], ["Period", period],
         ["Generated", longDate(new Date().toISOString())], ["Link", location.href], [],
         ["Summary"], ...summary(c).map(p => ["• " + p]), [],
-        [D.meta.demo ? "Sample data: figures are illustrative." : "Source: South African news coverage collected daily via Google News. Mentions count news items, not reach or advertising value."],
+        [D.meta.demo ? "Sample data: figures are illustrative." : "Source: South African news coverage, plus Reuters and the Financial Times, collected daily via Google News. Mentions count news items, not reach or advertising value."],
       ], [110, 40]), "Summary");
       XLSX.utils.book_append_sheet(wb, sheetFromRows(XLSX, [
         ["Brand", "You?", "Mentions", "Share of group (%)", `Previous ${st.days} days`, "Change (%)", "Positive", "Neutral", "Negative", "Net tone", "Top activity", "Top outlet"],

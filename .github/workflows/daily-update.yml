@@ -4,7 +4,12 @@ on:
   schedule:
     # 03:17 UTC = 05:17 SAST, every day. Scheduled runs only fire on the default branch.
     - cron: "17 3 * * *"
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      backfill:
+        description: "Re-collect the last 30 days for every brand and topic (use after changing outlets or search terms)"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -33,6 +38,7 @@ jobs:
         env:
           # Optional. Add this repository secret to have Claude write the morning briefing.
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          TRACKER_BACKFILL: ${{ inputs.backfill }}
         run: python tracker.py
 
       - name: Commit updated data
@@ -41,6 +47,7 @@ jobs:
           git config user.email "tracker-bot@users.noreply.github.com"
           git add data site
           git diff --cached --quiet || git commit -m "Daily tracker update $(date -u +%F)"
+          git pull --rebase origin main
           git push
 
       - uses: actions/configure-pages@v5
