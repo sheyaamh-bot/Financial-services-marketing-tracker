@@ -17,7 +17,16 @@
     "stock price today",
     "stock price and chart",
     "marketscreener",
-    "quote and history"
+    "quote and history",
+    "bedroom house",
+    "bedroom apartment",
+    "bedroom flat",
+    "bedroom townhouse",
+    "for sale in ",
+    "to rent in ",
+    "property for sale",
+    "click a unit trust",
+    "unit trust fund factsheet"
   ],
   "south_africa_only": {
     "_note": "Articles count when the publisher is South African (any .za address or an outlet in outlet_domains), or one of the international outlets listed in international_outlets.",
@@ -405,7 +414,11 @@
         "retirement",
         "retire",
         "pension",
-        "annuity"
+        "annuity",
+        "retirees",
+        "provident fund",
+        "retirement fund",
+        "gepf"
       ]
     },
     {
@@ -415,7 +428,9 @@
       "keywords": [
         "tax-free savings",
         "tax free savings",
-        "tfsa"
+        "tfsa",
+        "tax-free",
+        "tax free"
       ]
     },
     {
@@ -424,7 +439,9 @@
       "query": "\"two-pot\" OR \"two pot\" retirement",
       "keywords": [
         "two-pot",
-        "two pot"
+        "two pot",
+        "savings pot",
+        "savings component"
       ]
     },
     {
@@ -432,7 +449,12 @@
       "sector": "Wealth",
       "query": "\"offshore investing\" OR \"offshore investment\" OR \"offshore allowance\" OR \"invest offshore\"",
       "keywords": [
-        "offshore"
+        "offshore",
+        "foreign investment allowance",
+        "foreign assets",
+        "global investing",
+        "offshore allowance",
+        "rand hedge"
       ]
     },
     {
@@ -443,7 +465,14 @@
         "estate planning",
         "deceased estate",
         "inheritance",
-        " will "
+        " will ",
+        "estate duty",
+        "executor",
+        "wills",
+        "inherit",
+        "estate late",
+        "will and testament",
+        "trusts"
       ]
     },
     {
@@ -454,7 +483,13 @@
         "financial advice",
         "financial adviser",
         "financial advisor",
-        "financial planner"
+        "financial planner",
+        "financial planning",
+        "adviser",
+        "advisor",
+        "financial wellness",
+        "money coach",
+        "wealth manager"
       ]
     },
     {
@@ -462,7 +497,11 @@
       "sector": "Insure",
       "query": "\"fire risk\" OR \"fire damage\" OR \"fire claims\" OR \"veld fire\" OR \"fire insurance\"",
       "keywords": [
-        "fire"
+        "fire",
+        "blaze",
+        "wildfire",
+        "veld fire",
+        "fire damage"
       ]
     },
     {
@@ -473,7 +512,7 @@
         "commercial insurance",
         "business insurance",
         "commercial lines",
-        "commercial"
+        "business interruption"
       ]
     },
     {
@@ -484,9 +523,7 @@
         "car insurance",
         "motor insurance",
         "vehicle insurance",
-        "car ",
-        "motor",
-        "vehicle"
+        "hijack"
       ]
     },
     {
@@ -497,7 +534,11 @@
         "home insurance",
         "household insurance",
         "homeowner",
-        "home "
+        "building insurance",
+        "geyser",
+        "burst geyser",
+        "home cover",
+        "building cover"
       ]
     },
     {
@@ -509,7 +550,11 @@
         "climate",
         "storm",
         "weather",
-        "hail"
+        "hail",
+        "floods",
+        "flooding",
+        "climate change",
+        "drought"
       ]
     },
     {
@@ -517,7 +562,10 @@
       "sector": "Insure",
       "query": "\"cyber insurance\" OR \"cyber risk\" OR \"cyber attack\"",
       "keywords": [
-        "cyber"
+        "cyber",
+        "ransomware",
+        "data breach",
+        "hack"
       ]
     }
   ]

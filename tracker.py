@@ -133,6 +133,13 @@ def south_african(source_url: str, cfg: dict) -> bool:
     return domain.endswith(".za") or any(domain == d or domain.endswith("." + d) for d in allowed)
 
 
+def topic_relevant(title: str, topic: dict) -> bool:
+    """A topic article counts only when its headline uses the topic's words (its keywords or
+    the quoted phrases in its search). Site-limited searches otherwise return unrelated pages."""
+    phrases = [p.lower() for p in re.findall(r'"([^"]+)"', topic["query"])]
+    return matches(title, topic["keywords"] + phrases)
+
+
 def topic_queries(topic: dict, cfg: dict) -> list[str]:
     """Topic terms are global (TFSA is also Canadian, for example), so each topic runs two searches:
     one limited to South African websites and one asking for South Africa. Results are merged and
@@ -761,8 +768,11 @@ def main() -> int:
         cutoff = now - timedelta(days=cfg["history_days"])
         items = [i for i in known.values() if parse(i["published"]) >= cutoff]
 
+        topics_by_name = {t["name"]: t for t in cfg.get("topics", [])}
         known_t = {} if history.get("demo") else {i["id"]: i for i in history.get("topic_items", [])
                                                     if not excluded(i["title"], cfg)
+                                                    and i["topic"] in topics_by_name
+                                                    and topic_relevant(i["title"], topics_by_name[i["topic"]])
                                                     and south_african(i.get("source_url", ""), cfg)}
         have_t = set() if force_backfill else {i["topic"] for i in known_t.values()}
         for topic in cfg.get("topics", []):
@@ -771,6 +781,8 @@ def main() -> int:
                 for query in topic_queries(topic, cfg):
                     for it in fetch_google_news({"name": topic["name"], "query": query}, cfg, t_lookback):
                         it["topic"] = it.pop("brand")
+                        if not topic_relevant(it["title"], topic):
+                            continue
                         it["id"] = item_id(topic["name"], it["link"], it["title"])
                         known_t.setdefault(it["id"], it)
             except Exception as exc:
