@@ -105,11 +105,17 @@ def fetch_google_news(brand: dict, cfg: dict, lookback_days: int) -> list[dict]:
             published = parsedate_to_datetime(node.findtext("pubDate")).astimezone(timezone.utc)
         except Exception:
             published = datetime.now(timezone.utc)
-        if excluded(title, cfg) or not south_african(source_url, cfg):
+        if excluded(title, cfg):
+            continue
+        if not south_african(source_url, cfg):
+            DROPPED_OUTLETS[f"{source} ({urlparse(source_url).netloc.replace('www.', '')})"] += 1
             continue
         items.append({"brand": brand["name"], "title": title, "link": link, "source": source or "Unknown",
                       "source_url": source_url, "published": published.isoformat()})
     return items
+
+
+DROPPED_OUTLETS: Counter = Counter()  # non-SA publishers skipped this run, to help tune the outlet list
 
 
 def south_african(source_url: str, cfg: dict) -> bool:
@@ -782,6 +788,7 @@ def main() -> int:
             "updated_local": now.astimezone(SAST).strftime("%d %b %Y, %H:%M"),
             "demo": demo,
             "fetch_errors": errors,
+            "dropped_non_sa_outlets": DROPPED_OUTLETS.most_common(40),
         },
         "segments": segments,
         "social": social_summary(read_csv(DATA / "social.csv")),
