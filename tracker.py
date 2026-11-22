@@ -41,6 +41,8 @@ from urllib.parse import urlparse
 from pathlib import Path
 
 import requests
+
+import social
 from openpyxl import Workbook
 from openpyxl.chart import BarChart, Reference
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
@@ -686,6 +688,22 @@ def build_excel(data: dict, items: list[dict], cfg: dict, path: Path):
                    ", ".join(f"{b} ({c})" for b, c in hits.most_common(3))])
     style_table(ws, 4, 6, [26, 11, 13, 13, 13, 60], wrap_cols=("F",))
 
+    ws = wb.create_sheet("Social media")
+    title_block(ws, "Social media", "YouTube and Instagram update daily. LinkedIn comes from the monthly log in data/social.csv.")
+    ws.append([])
+    ws.append(["Sector", "Brand", "YouTube subscribers", "YouTube videos (30d)", "YouTube views on those videos",
+               "Instagram followers", "Instagram change (30d)", "Instagram posts (30d)", "Avg engagement per post",
+               "LinkedIn followers", "LinkedIn as at", "Live ads (Meta Ad Library)"])
+    for b in (data.get("social_media") or {}).get("brands", {}).values():
+        yt, ig, li = b.get("youtube") or {}, b.get("instagram") or {}, b.get("linkedin") or {}
+        ws.append(["Insurance" if b["sector"] == "Insure" else "Wealth", b["brand"], yt.get("subscribers"),
+                   yt.get("videos_30d"), yt.get("views_30d"), ig.get("followers"), ig.get("change_30d"),
+                   ig.get("posts_30d"), ig.get("avg_engagement_30d"), li.get("followers"), li.get("date"), "Open"])
+        link = ws.cell(row=ws.max_row, column=12)
+        link.hyperlink = b["ad_library"]
+        link.font = Font(name=FONT, size=10, color=ACCENT, underline="single")
+    style_table(ws, 4, 12, [10, 18, 14, 14, 16, 14, 14, 14, 14, 14, 12, 16], wrap_cols=())
+
     ws = wb.create_sheet("Social tracker")
     title_block(ws, "Social followers", "Manual input: add rows to data/social.csv (date, brand, platform, followers).")
     ws.append([])
@@ -822,6 +840,11 @@ def main() -> int:
         "campaigns": sorted(read_csv(DATA / "campaigns.csv"), key=lambda r: r.get("date_spotted", ""), reverse=True),
     }
     data["topics"] = build_topics_data(items, topic_items, cfg, now)
+    try:
+        data["social_media"] = social.collect(cfg, DATA, read_csv(DATA / "social.csv"), now, demo=demo)
+    except Exception as exc:  # social data is a bonus: never let it stop the daily update
+        print(f"Social media step skipped: {exc}", file=sys.stderr)
+        data["social_media"] = {"errors": [str(exc)], "brands": {}}
     SITE.mkdir(exist_ok=True)
     (SITE / "search.json").write_text(json.dumps(build_search_index(items, topic_items, cfg, now),
                                                  ensure_ascii=False), encoding="utf-8")

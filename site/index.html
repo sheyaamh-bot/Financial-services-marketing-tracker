@@ -139,7 +139,7 @@ mark{background:#FFE58A;color:#111418;border-radius:2px;padding:0 1px}
 @media print{
   @page{margin:14mm}
   body{background:#fff;color:#111418}
-  header,.banner,#dashView,#topicsView,.controls,.no-print,footer{display:none !important}
+  header,.banner,#dashView,#topicsView,#socialView,.controls,.no-print,footer{display:none !important}
   #reportView{display:block !important}
   .print-only{display:block}
   .card{break-inside:avoid;border:1px solid #ccc}
@@ -170,6 +170,7 @@ mark{background:#FFE58A;color:#111418;border-radius:2px;padding:0 1px}
       <button class="tab" role="tab" id="tab-Insure" data-seg="Insure" aria-selected="false">Insurance</button>
       <button class="tab" role="tab" id="tab-report" data-view="report" aria-selected="false">Competitor report</button>
       <button class="tab" role="tab" id="tab-topics" data-view="topics" aria-selected="false">Topics &amp; search</button>
+      <button class="tab" role="tab" id="tab-social" data-view="social" aria-selected="false">Social media</button>
     </div>
   </div>
 </header>
@@ -250,6 +251,7 @@ mark{background:#FFE58A;color:#111418;border-radius:2px;padding:0 1px}
 </div>
 <div id="reportView" hidden></div>
 <div id="topicsView" hidden></div>
+<div id="socialView" hidden></div>
 </main>
 <footer class="wrap">
   Built by Sheyaam Hill using Claude Code. An independent tracker of South African news coverage, plus Reuters and the Financial Times. Not affiliated with any brand shown.
@@ -287,6 +289,7 @@ function pickFromHash(){
   const { path } = parseHash();
   if (path === "report") view = "report";
   else if (path === "topics" || path === "search") view = "topics";
+  else if (path === "social") view = "social";
   else { view = "dash"; if (path === "insurance" || path === "insure") seg = "Insure"; else if (path === "wealth") seg = "Wealth"; }
 }
 function route(){
@@ -296,9 +299,11 @@ function route(){
   $("#dashView").hidden = view !== "dash";
   $("#reportView").hidden = view !== "report";
   $("#topicsView").hidden = view !== "topics";
+  $("#socialView").hidden = view !== "social";
   $("main").setAttribute("aria-labelledby", view === "dash" ? "tab-" + seg : "tab-" + view);
   if (view === "dash") render();
   else if (view === "report") window.Report && Report.show(parseHash().params);
+  else if (view === "social") window.Social && Social.show(parseHash().params);
   else window.Topics && Topics.show(parseHash().params);
 }
 document.querySelectorAll(".tab").forEach(t => t.onclick = () => {
@@ -356,6 +361,7 @@ function redraw(){
   if (!D) return;
   if (view === "dash") { drawCharts(); renderHeat(); renderSent(); }
   else if (view === "report") window.Report && Report.redraw();
+  else if (view === "social") window.Social && Social.redraw();
   else window.Topics && Topics.redraw();
 }
 
@@ -484,5 +490,6 @@ function bindTips(root){
 <script src="shared.js"></script>
 <script src="report.js"></script>
 <script src="topics.js"></script>
+<script src="social.js"></script>
 </body>
 </html>

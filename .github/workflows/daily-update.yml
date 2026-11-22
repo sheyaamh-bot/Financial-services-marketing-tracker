@@ -39,6 +39,10 @@ jobs:
           # Optional. Add this repository secret to have Claude write the morning briefing.
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           TRACKER_BACKFILL: ${{ inputs.backfill }}
+          # Optional social media keys (Settings → Secrets and variables → Actions).
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
         run: python tracker.py
 
       - name: Commit updated data

@@ -22,6 +22,25 @@ Share of voice is calculated within each sector. Every morning it produces:
 
 Every view has its own link, for example `#report?sector=wealth&you=Allan Gray&vs=Coronation|Ninety One&days=30` or `#topics?topic=Fire risk`.
 
+- **Social media.** For each brand: Instagram followers, posts and engagement; YouTube subscribers, new videos and views; LinkedIn followers from a monthly log; and a one-click link to the brand's live Facebook and Instagram ads in Meta's Ad Library.
+
+## Social media set-up
+
+Accounts are found automatically on each brand's own website and rechecked monthly. Check them on the **Social media** tab. To correct one, add a `social` entry to that brand in `config.json`, for example:
+
+```json
+"social": {"instagram": "brandhandle", "youtube": "@BrandChannel", "linkedin": "brand-company-slug"}
+```
+
+| Platform | What you need to do |
+|---|---|
+| YouTube | Nothing for new videos and views. For subscriber counts, create a free API key: Google Cloud Console → new project → enable **YouTube Data API v3** → Credentials → **Create API key**. Save it as the repository secret `YOUTUBE_API_KEY`. |
+| Instagram | You need an Instagram **business or creator** account linked to a Facebook Page. In Meta for Developers, create an app, add the Instagram Graph API, and generate a token with `instagram_basic` and `pages_show_list`. Save the Instagram account's ID as `IG_USER_ID` and the token as `IG_ACCESS_TOKEN`. A system-user token from Meta Business Manager does not expire; other tokens last 60 days. |
+| LinkedIn | Once a month, add a row per brand to `data/social.csv`: `2026-12-01,Sanlam,LinkedIn,512000,`. The follower count is on each company page; the dashboard links to them. |
+| Ads | Nothing. The **View ads** links open Meta's Ad Library for South Africa. |
+
+Secrets are added under **Settings → Secrets and variables → Actions → New repository secret**.
+
 ## What it tracks
 
 | Area | Source | Updates |
@@ -33,6 +52,8 @@ Every view has its own link, for example `#report?sector=wealth&you=Allan Gray&v
 | Top outlets | Google News | Automatic |
 | Morning briefing | Rules, or Claude if an API key is set | Automatic |
 | Tracked topics | Google News, per topic | Automatic |
+| YouTube and Instagram | Platform APIs and public feeds | Automatic |
+| LinkedIn followers | `data/social.csv` | Manual, monthly |
 | Campaign and activity log | `data/campaigns.csv` | Manual |
 | Social followers | `data/social.csv` | Manual |
 

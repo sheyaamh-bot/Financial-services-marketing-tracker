@@ -568,5 +568,9 @@
         "hack"
       ]
     }
-  ]
+  ],
+  "social": {
+    "_note": "Accounts are found on each brand's website. To correct one, add e.g. \"social\": {\"instagram\": \"handle\", \"youtube\": \"@handle\", \"linkedin\": \"company-slug\"} to that brand.",
+    "graph_api_version": "v21.0"
+  }
 }
