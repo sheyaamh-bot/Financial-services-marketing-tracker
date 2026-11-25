@@ -1,16 +1,16 @@
 {
  "Alexander Forbes": {
-  "discovered_at": "2026-11-24T13:52:30.561670+00:00",
+  "discovered_at": "2026-11-25T13:06:26.535454+00:00",
   "source": "https://www.alexforbes.com"
  },
  "Allan Gray": {
-  "discovered_at": "2026-11-24T13:52:30.561670+00:00",
+  "discovered_at": "2026-11-25T13:06:26.535454+00:00",
   "source": "https://www.allangray.co.za",
   "youtube": "channel/UCeUM3UxwP4z4tzhGB5cIN_A",
   "youtube_source": "YouTube search"
  },
  "Brenthurst": {
-  "discovered_at": "2026-11-24T13:52:30.561670+00:00",
+  "discovered_at": "2026-11-25T13:06:26.535454+00:00",
   "source": "https://www.brenthurst.co.za",
   "youtube": "channel/UCz1HyZdt8OstaEZoLDqKYSQ",
   "youtube_source": "YouTube search"
@@ -24,7 +24,7 @@
   "source": "https://www.citadel.co.za"
  },
  "Coronation": {
-  "discovered_at": "2026-11-24T13:52:30.561670+00:00",
+  "discovered_at": "2026-11-25T13:06:26.535454+00:00",
   "source": "https://www.coronation.com",
   "youtube": "channel/UCrqtFQtVe7R6dhGMVGCT4BQ",
   "youtube_source": "YouTube search"
@@ -38,8 +38,10 @@
   "source": "https://www.discovery.co.za"
  },
  "Investec": {
-  "discovered_at": "2026-11-24T13:52:30.561670+00:00",
-  "source": "https://www.investec.com"
+  "discovered_at": "2026-11-25T13:06:26.535454+00:00",
+  "source": "https://www.investec.com",
+  "youtube": "channel/UCaf0NSmUWMHVQQd090tt3NA",
+  "youtube_source": "YouTube search"
  },
  "Liberty": {
   "youtube": "channel/UCC8emEYWYy-ux9rePUgsNxA",
@@ -58,14 +60,16 @@
   "source": "https://www.momentum.co.za"
  },
  "Ninety One": {
-  "discovered_at": "2026-11-24T13:52:30.561670+00:00",
+  "discovered_at": "2026-11-25T13:06:26.535454+00:00",
   "source": "https://ninetyone.com",
   "youtube": "channel/UCN37HNZyZvrGqcP0fdaY9VQ",
   "youtube_source": "YouTube search"
  },
  "Old Mutual": {
-  "discovered_at": "2026-11-24T13:52:30.561670+00:00",
-  "source": "https://www.oldmutual.co.za"
+  "discovered_at": "2026-11-25T13:06:26.535454+00:00",
+  "source": "https://www.oldmutual.co.za",
+  "youtube": "channel/UC_1IMTdz1K1g2OJbkQRL3HA",
+  "youtube_source": "YouTube search"
  },
  "PSG Wealth": {
   "youtube": "@PSGFinancialServices",
@@ -93,7 +97,7 @@
   "source": "https://www.sygnia.co.za"
  },
  "Aon SA": {
-  "discovered_at": "2026-11-24T13:52:30.561670+00:00",
+  "discovered_at": "2026-11-25T13:06:26.535454+00:00",
   "source": "https://www.aon.com/southafrica"
  },
  "Discovery Insure": {
@@ -113,7 +117,7 @@
   "source": "https://www.hollard.co.za"
  },
  "Indwe": {
-  "discovered_at": "2026-11-24T13:52:30.561670+00:00",
+  "discovered_at": "2026-11-25T13:06:26.535454+00:00",
   "source": "https://www.indwerisk.co.za"
  },
  "King Price": {
@@ -128,7 +132,7 @@
   "youtube": "user/TheMarshChannel",
   "linkedin": "marshrisk",
   "facebook": "MarshGlobal1",
-  "discovered_at": "2026-11-24T13:52:30.561670+00:00",
+  "discovered_at": "2026-11-25T13:06:26.535454+00:00",
   "source": "https://www.marsh.com/za"
  },
  "MiWay": {
@@ -140,7 +144,7 @@
   "source": "https://www.miway.co.za"
  },
  "Old Mutual Insure": {
-  "discovered_at": "2026-11-24T13:52:30.561670+00:00",
+  "discovered_at": "2026-11-25T13:06:26.535454+00:00",
   "source": "https://www.oldmutualinsure.co.za",
   "youtube": "channel/UCDUv__UfDevalZ-EfE-xEqw",
   "youtube_source": "YouTube search"
